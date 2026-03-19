@@ -1,0 +1,374 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f0eb;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #4a2c0a;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f5c97a;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+}
+
+.nav-links a:hover {
+    color: #f5c97a;
+}
+
+/* Auth pages */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f0eb;
+}
+
+.auth-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-box h2 {
+    font-size: 26px;
+    color: #4a2c0a;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #888;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #4a2c0a;
+}
+
+.form-group input:disabled {
+    background-color: #f5f5f5;
+    color: #888;
+}
+
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a2c0a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #6b3f10;
+}
+
+.btn-secondary {
+    padding: 10px 18px;
+    background-color: #888;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background-color: #666;
+}
+
+.btn-danger {
+    padding: 8px 14px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-success {
+    padding: 8px 14px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-success:hover {
+    background-color: #1e8449;
+}
+
+/* Alerts */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Auth links */
+.auth-links {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #888;
+}
+
+.auth-links a {
+    color: #4a2c0a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* Main container */
+.main-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Profile box */
+.profile-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-box h2 {
+    color: #4a2c0a;
+    margin-bottom: 24px;
+}
+
+/* Search bar */
+.search-bar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.search-bar input {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 300px;
+    outline: none;
+}
+
+.search-bar input:focus {
+    border-color: #4a2c0a;
+}
+
+/* Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.data-table thead {
+    background-color: #4a2c0a;
+    color: white;
+}
+
+.data-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.data-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table tr:hover {
+    background-color: #fdf6ee;
+}
+
+/* Badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.no-data {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+}
+/* Password wrapper */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 42px;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.eye-icon:hover {
+    opacity: 1;
+}
+
+/* Password strength bar */
+.password-strength {
+    height: 4px;
+    background: #eee;
+    border-radius: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.strength-text {
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+.match-text {
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+.search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-row input {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 300px;
+    outline: none;
+}
+
+.search-row input:focus {
+    border-color: #4a2c0a;
+}
+
+.search-row .btn-primary {
+    width: auto;
+    padding: 10px 20px;
+}
+
+.search-row .btn-secondary {
+    padding: 10px 20px;
+}
