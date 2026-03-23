@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8081/api/products";
+const API_BASE = "/api/products";
 
 function viewDetails(id) {
     window.location.href = `/product-details.html?id=${id}`;

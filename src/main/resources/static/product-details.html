@@ -11,6 +11,7 @@
         .hidden { display: none; }
     </style>
 </head>
+<div id="navbar-placeholder"></div>
 <body>
 
 <nav class="navbar">
@@ -21,17 +22,13 @@
         <div class="menu-toggle" id="menuToggle">☰</div>
         <ul class="nav-links" id="navLinks">
             <li><a href="/products.html">Shop</a></li>
-            <li><a href="/admin.html">Admin Panel</a></li>
+            <li><a href="/admin.html">product Admin Panel</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
     </div>
 </nav>
 
-<div class="video-background">
-    <video autoplay muted loop playsinline>
-        <source src="/videos/background1.mp4" type="video/mp4">
-    </video>
-</div>
+
 <div class="video-overlay"></div>
 
 <div class="main-content">
@@ -137,7 +134,7 @@
             document.getElementById('detailRatingValue').value = val;
             stars.forEach(st => {
                 st.textContent = st.dataset.val <= val ? '★' : '☆';
-                st.style.color = st.dataset.val <= val ? '#d97706' : '#d1d5db';
+                st.style.color = st.dataset.val <= val ? '#d97706' : '#954d4d';
             });
         });
     });
@@ -214,3 +211,4 @@
 </script>
 </body>
 </html>
+product-details.html
