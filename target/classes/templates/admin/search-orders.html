@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Orders — Admin</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { background: #F5EFE7; }
+
+        .search-card {
+            background: white; border-radius: var(--radius);
+            padding: 1.75rem; box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem; animation: fadeInDown 0.4s ease;
+        }
+        .search-card h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--chocolate); font-size: 1.2rem; margin-bottom: 1.25rem;
+        }
+
+        /* Tabs */
+        .tab-row { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 0.45rem 1.1rem; border: 2px solid #E8D5C0; border-radius: 20px;
+            background: white; color: var(--cocoa); font-family: 'DM Sans',sans-serif;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            border-color: var(--caramel); color: var(--caramel);
+            background: rgba(196,123,58,0.06);
+        }
+
+        .search-panel { display: none; }
+        .search-panel.active { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end; }
+        .search-panel .form-group { flex: 1; min-width: 160px; margin: 0; }
+
+        /* Result rows */
+        .result-card {
+            background: white; border-radius: var(--radius);
+            padding: 1.1rem 1.4rem; margin-bottom: 0.65rem;
+            box-shadow: var(--shadow-sm);
+            display: grid; grid-template-columns: 70px 1fr 130px 110px 100px;
+            gap: 0.75rem; align-items: center;
+            animation: fadeInUp 0.3s ease both; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .result-card:hover { transform: translateX(4px); box-shadow: var(--shadow); }
+        @media(max-width:700px){ .result-card { grid-template-columns: 1fr 1fr; } }
+
+        .res-id { font-weight: 800; color: var(--caramel); font-size: 1rem; }
+        .res-name { font-weight: 600; font-size: 0.88rem; color: var(--dark); }
+        .res-name span { display: block; font-size: 0.75rem; color: var(--cocoa); font-weight: 400; }
+        .res-items { font-size: 0.75rem; color: var(--cocoa); margin-top: 3px; }
+        .res-total { font-weight: 700; color: var(--chocolate); font-size: 0.88rem; }
+        .res-date { font-size: 0.78rem; color: var(--cocoa); }
+
+        /* Suggestion tiles shown when no search done yet */
+        .suggestions-grid {
+            display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 1rem;
+        }
+        @media(max-width:700px){ .suggestions-grid { grid-template-columns: 1fr; } }
+
+        .suggestion-tile {
+            background: white; border-radius: var(--radius);
+            padding: 1.25rem; box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--caramel);
+            animation: fadeInUp 0.4s ease both;
+        }
+        .suggestion-tile h3 { font-size: 0.95rem; color: var(--chocolate); margin-bottom: 0.4rem; }
+        .suggestion-tile p { font-size: 0.82rem; color: var(--cocoa); margin: 0; line-height: 1.5; }
+        .tile-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+        .quick-link-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .quick-link {
+            padding: 0.3rem 0.8rem; background: rgba(196,123,58,0.08);
+            border: 1px solid rgba(196,123,58,0.2); border-radius: 10px;
+            color: var(--caramel); font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; text-decoration: none; transition: all 0.2s;
+        }
+        .quick-link:hover { background: rgba(196,123,58,0.15); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/admin/dashboard" class="navbar-brand">🍫 <span>Admin Panel</span></a>
+    <ul class="navbar-nav">
+        <li><a href="/admin/dashboard">📋 Dashboard</a></li>
+        <li><a href="/admin/orders/search" style="color:var(--gold)">🔍 Search</a></li>
+        <li><a href="/logout">Sign Out</a></li>
+    </ul>
+</nav>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>🔍 Search Orders</h1>
+        <p>Find orders by ID, date, or customer name</p>
+    </div>
+
+    <!-- Search card -->
+    <div class="search-card">
+        <h2>Search Filters</h2>
+
+        <!-- Tabs -->
+        <div class="tab-row">
+            <button class="tab-btn active" onclick="switchTab('id', this)">🔢 By Order ID</button>
+            <button class="tab-btn" onclick="switchTab('date', this)">📅 By Date</button>
+            <button class="tab-btn" onclick="switchTab('name', this)">👤 By Customer</button>
+            <button class="tab-btn" onclick="switchTab('status', this)">🏷️ By Status</button>
+        </div>
+
+        <!-- Panel: by ID -->
+        <form method="get" action="/admin/orders/search">
+            <div class="search-panel active" id="panel-id">
+                <div class="form-group">
+                    <label class="form-label">Order ID Number</label>
+                    <input type="number" name="id" class="form-control"
+                           placeholder="e.g. 42" th:value="${searchId}" min="1">
+                </div>
+                <button type="submit" class="btn btn-primary">Search →</button>
+            </div>
+        </form>
+
+        <!-- Panel: by Date -->
+        <form method="get" action="/admin/orders/search">
+            <div class="search-panel" id="panel-date">
+                <div class="form-group">
+                    <label class="form-label">Select Date</label>
+                    <input type="date" name="date" class="form-control" th:value="${searchDate}">
+                </div>
+                <button type="submit" class="btn btn-primary">Filter →</button>
+            </div>
+        </form>
+
+        <!-- Panel: by Name -->
+        <form method="get" action="/admin/orders/search">
+            <div class="search-panel" id="panel-name">
+                <div class="form-group">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" name="name" class="form-control"
+                           placeholder="e.g. Ayesha" th:value="${searchName}">
+                </div>
+                <button type="submit" class="btn btn-primary">Search →</button>
+            </div>
+        </form>
+
+        <!-- Panel: by Status (quick filter links) -->
+        <div class="search-panel" id="panel-status">
+            <div style="width:100%">
+                <p style="font-size:0.85rem;color:var(--cocoa);margin-bottom:0.75rem">
+                    Click a status to see all orders in that category:
+                </p>
+                <div class="quick-link-row">
+                    <a class="quick-link" href="/admin/orders/search?status=PENDING">⏳ Pending</a>
+                    <a class="quick-link" href="/admin/orders/search?status=CONFIRMED">✅ Confirmed</a>
+                    <a class="quick-link" href="/admin/orders/search?status=IN_PREPARATION">🔥 Baking</a>
+                    <a class="quick-link" href="/admin/orders/search?status=READY">📦 Ready</a>
+                    <a class="quick-link" href="/admin/orders/search?status=DELIVERED">🚚 Delivered</a>
+                    <a class="quick-link" href="/admin/orders/search?status=CANCELLED">✕ Cancelled</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RESULTS section — only shows after a search -->
+    <div th:if="${searched}">
+        <div class="page-header">
+            <h2 style="font-size:1.25rem"
+                th:text="'Found ' + ${#lists.size(orders)} + ' result(s)'">Results</h2>
+        </div>
+
+        <div th:if="${#lists.isEmpty(orders)}" class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No orders found</h3>
+            <p>Try a different keyword or date range.</p>
+        </div>
+
+        <div th:each="order, stat : ${orders}"
+             class="result-card"
+             th:style="'animation-delay:' + ${stat.index * 0.05} + 's'">
+            <div class="res-id" th:text="'#' + ${order.id}">#1</div>
+            <div>
+                <div class="res-name">
+                    <span th:text="${order.customerName}">Name</span>
+                    <span th:text="${order.customerEmail}">email</span>
+                </div>
+                <div class="res-items">
+          <span th:each="item, istat : ${order.items}">
+            <span th:text="${item.quantity} + 'x ' + ${item.productName}">item</span>
+            <span th:if="${!istat.last}">, </span>
+          </span>
+                </div>
+            </div>
+            <div>
+        <span class="status-badge"
+              th:classappend="'status-' + ${order.status}"
+              th:text="${order.status.replace('_',' ')}"></span>
+            </div>
+            <div class="res-total"
+                 th:text="'LKR ' + ${#numbers.formatDecimal(order.totalAmount,1,2)}">LKR 0</div>
+            <div class="res-date"
+                 th:text="${#temporals.format(order.createdAt,'MMM dd, yyyy')}">Jan 01</div>
+        </div>
+    </div>
+
+    <!-- SUGGESTIONS section — shown when no search done yet -->
+    <div th:unless="${searched}">
+        <div class="page-header">
+            <h2 style="font-size:1.1rem;color:var(--cocoa)">💡 Search Tips</h2>
+        </div>
+        <div class="suggestions-grid">
+
+            <div class="suggestion-tile" style="animation-delay:0.05s">
+                <div class="tile-icon">🔢</div>
+                <h3>Search by Order ID</h3>
+                <p>If a customer contacts you with a complaint or question, enter their order number directly to pull it up instantly.</p>
+            </div>
+
+            <div class="suggestion-tile" style="animation-delay:0.1s;border-left-color:#17A2B8">
+                <div class="tile-icon">📅</div>
+                <h3>Filter by Date</h3>
+                <p>View all orders placed on a specific day — useful for end-of-day reporting or checking weekend rush orders.</p>
+            </div>
+
+            <div class="suggestion-tile" style="animation-delay:0.15s;border-left-color:#28A745">
+                <div class="tile-icon">👤</div>
+                <h3>Search by Customer</h3>
+                <p>Type a customer's name to see all their orders across time. Helpful for handling repeat customers or loyalty checks.</p>
+            </div>
+
+            <div class="suggestion-tile" style="animation-delay:0.2s;border-left-color:#FFC107">
+                <div class="tile-icon">🏷️</div>
+                <h3>Filter by Status</h3>
+                <p>Use the Status tab to quickly see all PENDING orders that need attention, or all DELIVERED orders for a record.</p>
+            </div>
+
+            <div class="suggestion-tile" style="animation-delay:0.25s;border-left-color:#9B59B6">
+                <div class="tile-icon">📦</div>
+                <h3>Back to Dashboard</h3>
+                <p>The main dashboard shows all live orders with expandable details. Use Quick Filters in the sidebar to sort by status.</p>
+                <a href="/admin/dashboard" class="quick-link" style="display:inline-block;margin-top:0.5rem">
+                    → Go to Dashboard
+                </a>
+            </div>
+
+            <div class="suggestion-tile" style="animation-delay:0.3s;border-left-color:#E74C3C">
+                <div class="tile-icon">🔔</div>
+                <h3>Notifications</h3>
+                <p>New orders show a red dot on the bell icon in the top navbar. Click it to see new orders and mark them as read.</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function switchTab(type, btn) {
+        // Update tab button styles
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Show correct panel
+        document.querySelectorAll('.search-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + type).classList.add('active');
+    }
+
+    // Auto-detect which tab to show based on URL params
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('date')) {
+            document.querySelectorAll('.tab-btn')[1].click();
+        } else if (params.get('name')) {
+            document.querySelectorAll('.tab-btn')[2].click();
+        } else if (params.get('status')) {
+            document.querySelectorAll('.tab-btn')[3].click();
+        }
+    });
+</script>
+</body>
+</html>
