@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard — Brownie Shop</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { background: #F5EFE7; margin: 0; }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* ---- Sidebar ---- */
+        .sidebar {
+            background: var(--chocolate);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 64px;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+        .sidebar-section { padding: 0.5rem 1.2rem; margin-top: 0.5rem; }
+        .sidebar-label {
+            font-size: 0.68rem; color: rgba(230,168,85,0.6);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            font-weight: 600; margin-bottom: 0.5rem;
+        }
+        .sidebar-link {
+            display: flex; align-items: center; gap: 0.7rem;
+            padding: 0.6rem 0.9rem; color: rgba(253,246,236,0.8);
+            text-decoration: none; border-radius: 8px;
+            font-size: 0.86rem; font-weight: 500;
+            transition: all 0.2s; margin-bottom: 0.2rem; cursor: pointer;
+            border: none; background: none; width: 100%; text-align: left;
+        }
+        .sidebar-link:hover, .sidebar-link.filter-active {
+            background: rgba(196,123,58,0.25); color: var(--gold);
+        }
+
+        /* ---- Main content ---- */
+        .main-content { padding: 1.75rem; overflow-y: auto; }
+
+        /* ---- Stats ---- */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1rem; margin-bottom: 1.75rem;
+        }
+        @media(max-width:900px){ .stats-row { grid-template-columns: repeat(2,1fr); } }
+
+        /* ---- Orders table ---- */
+        .orders-section {
+            background: white; border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); overflow: hidden;
+        }
+        .orders-header {
+            background: var(--chocolate); color: var(--gold);
+            padding: 1rem 1.5rem; display: flex;
+            align-items: center; justify-content: space-between;
+        }
+        .orders-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem; color: var(--gold); margin: 0;
+        }
+        .filter-bar {
+            display: flex; gap: 0.75rem; align-items: center;
+            padding: 0.85rem 1.5rem; border-bottom: 1px solid rgba(196,123,58,0.1);
+            flex-wrap: wrap; background: rgba(196,123,58,0.03);
+        }
+        .filter-select {
+            padding: 0.4rem 0.75rem; border: 1.5px solid #E8D5C0;
+            border-radius: 8px; font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem; background: white; color: var(--dark); outline: none;
+        }
+        .filter-select:focus { border-color: var(--caramel); }
+
+        /* ---- Order rows ---- */
+        .order-row { border-bottom: 1px solid rgba(196,123,58,0.08); }
+        .order-row-main {
+            display: grid;
+            grid-template-columns: 70px 1fr 130px 130px 110px 40px;
+            gap: 0.75rem; padding: 0.85rem 1.5rem;
+            align-items: center; cursor: pointer; transition: background 0.2s;
+        }
+        .order-row-main:hover { background: rgba(196,123,58,0.04); }
+
+        .order-row-detail {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.45s ease, padding 0.3s ease;
+            background: #fdf9f5; border-top: 0px solid transparent;
+        }
+        .order-row-detail.open {
+            max-height: 1000px; padding: 1.25rem 1.5rem;
+            border-top: 1px solid rgba(196,123,58,0.1);
+        }
+
+        .col-id { font-weight: 700; color: var(--caramel); font-size: 0.88rem; }
+        .col-customer { font-size: 0.88rem; }
+        .col-customer strong { display: block; color: var(--dark); }
+        .col-customer span { font-size: 0.75rem; color: var(--cocoa); }
+        .col-total { font-weight: 700; color: var(--chocolate); font-size: 0.88rem; }
+        .col-time { font-size: 0.76rem; color: var(--cocoa); }
+        .expand-arrow { color: var(--caramel); transition: transform 0.3s; text-align: center; }
+        .order-row.expanded .expand-arrow { transform: rotate(180deg); }
+
+        /* ---- Forms inside expanded row ---- */
+        .detail-forms { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        @media(max-width:800px){ .detail-forms { grid-template-columns: 1fr; } }
+
+        .form-label-sm {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; display: block; margin-bottom: 0.4rem; color: var(--cocoa);
+        }
+        .status-select {
+            width: 100%; padding: 0.4rem 0.6rem; border: 1.5px solid #E8D5C0;
+            border-radius: 6px; font-size: 0.82rem; font-family: 'DM Sans',sans-serif;
+            background: white; outline: none; cursor: pointer; margin-bottom: 0.5rem;
+        }
+        .status-select:focus { border-color: var(--caramel); }
+
+        .note-area {
+            width: 100%; padding: 0.55rem 0.75rem; border: 1.5px solid #E8D5C0;
+            border-radius: 8px; font-family: 'DM Sans',sans-serif; font-size: 0.83rem;
+            resize: vertical; min-height: 72px; outline: none; box-sizing: border-box;
+            margin-bottom: 0.5rem;
+        }
+        .note-area:focus { border-color: var(--caramel); }
+
+        .action-btn {
+            padding: 0.38rem 0.85rem; border: none; border-radius: 6px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            font-family: 'DM Sans',sans-serif; transition: opacity 0.2s; color: white;
+        }
+        .action-btn:hover { opacity: 0.88; }
+        .btn-brown { background: var(--caramel); }
+        .btn-teal  { background: #17A2B8; }
+
+        .note-display {
+            padding: 0.5rem 0.75rem; border-radius: 0 6px 6px 0;
+            font-size: 0.8rem; margin-top: 0.4rem;
+        }
+        .note-admin    { background:#FFF3CD; border-left:4px solid #FFC107; color:#856404; }
+        .note-customer { background:#D1ECF1; border-left:4px solid #17A2B8; color:#0C5460; }
+
+        .items-display { font-size: 0.82rem; margin-bottom: 0.75rem; }
+        .items-display strong { color: var(--chocolate); display: block; margin-bottom: 0.35rem; }
+        .item-tag {
+            display: inline-block; background: white; border: 1px solid #E8D5C0;
+            padding: 2px 8px; border-radius: 10px; margin: 2px; font-size: 0.8rem;
+        }
+        .delivery-info { font-size: 0.8rem; color: var(--cocoa); margin: 0.25rem 0; }
+
+        /* ---- Notification bell ---- */
+        .notif-wrapper { position: relative; display: inline-block; }
+        .notif-bell {
+            background: none; border: none; color: rgba(253,246,236,0.9);
+            font-size: 0.95rem; cursor: pointer; padding: 0.4rem 0.85rem;
+            border-radius: 8px; font-family: 'DM Sans',sans-serif; font-weight: 500;
+            display: flex; align-items: center; gap: 0.35rem; position: relative;
+            transition: color 0.2s;
+        }
+        .notif-bell:hover { color: var(--gold); }
+        .notif-red-dot {
+            position: absolute; top: 3px; right: 3px;
+            width: 9px; height: 9px; background: #E74C3C;
+            border-radius: 50%; border: 2px solid var(--chocolate);
+            animation: pulse 1.5s infinite;
+        }
+        .notif-panel {
+            position: absolute; top: calc(100% + 6px); right: 0;
+            width: 310px; background: white; border-radius: 12px;
+            box-shadow: 0 16px 48px rgba(59,31,10,0.22);
+            z-index: 600; display: none; overflow: hidden;
+        }
+        .notif-panel.open { display: block; }
+        .notif-head {
+            background: var(--chocolate); padding: 0.85rem 1.1rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .notif-head-title { color: var(--gold); font-weight: 700; font-size: 0.88rem; }
+        .notif-mark-btn {
+            background: none; border: 1px solid rgba(230,168,85,0.4);
+            color: var(--gold); font-size: 0.72rem; padding: 0.18rem 0.55rem;
+            border-radius: 10px; cursor: pointer; font-family: 'DM Sans',sans-serif;
+        }
+        .notif-mark-btn:hover { background: rgba(230,168,85,0.15); }
+        .notif-list { max-height: 300px; overflow-y: auto; }
+        .notif-item {
+            padding: 0.8rem 1.1rem; border-bottom: 1px solid #F5EFE7;
+            display: flex; gap: 0.7rem; cursor: pointer;
+        }
+        .notif-item:hover { background: rgba(196,123,58,0.04); }
+        .notif-icon {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--caramel), var(--gold));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; flex-shrink: 0;
+        }
+        .notif-name { font-weight: 700; font-size: 0.83rem; color: var(--chocolate); }
+        .notif-detail { font-size: 0.76rem; color: var(--cocoa); margin-top: 2px; }
+        .notif-time { font-size: 0.71rem; color: #bbb; margin-top: 2px; }
+        .notif-empty { padding: 1.75rem; text-align: center; color: var(--cocoa); font-size: 0.85rem; }
+
+        .new-pulse { display:inline-block; width:8px; height:8px; background:#E74C3C; border-radius:50%; animation:pulse 1.5s infinite; margin-right:5px; }
+        .visible-count { font-size:0.8rem; color:var(--cocoa); margin-left:auto; background:var(--cream); padding:0.2rem 0.6rem; border-radius:10px; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="/admin/dashboard" class="navbar-brand">🍫 <span>Admin Panel</span></a>
+    <ul class="navbar-nav">
+
+        <!-- Notification Bell -->
+        <li>
+            <div class="notif-wrapper">
+                <button class="notif-bell" id="notifBellBtn" onclick="toggleNotif(event)">
+                    🔔 Notifications
+                    <span class="notif-red-dot" id="notifDot" th:if="${newOrderCount > 0}"></span>
+                </button>
+                <div class="notif-panel" id="notifPanel">
+                    <div class="notif-head">
+            <span class="notif-head-title" id="notifTitle">
+              🔔 New Orders (<span th:text="${newOrderCount}">0</span>)
+            </span>
+                        <button class="notif-mark-btn" onclick="markAllRead()">✓ Mark read</button>
+                    </div>
+                    <div class="notif-list" id="notifList">
+                        <div th:if="${#lists.isEmpty(newOrders)}" class="notif-empty">
+                            ✅ All caught up! No new orders.
+                        </div>
+                        <div th:each="no : ${newOrders}" class="notif-item"
+                             th:data-id="${no.id}" onclick="closeNotifAndScroll(this.dataset.id)">
+                            <div class="notif-icon">🛒</div>
+                            <div>
+                                <div class="notif-name" th:text="${no.customerName}">Customer</div>
+                                <div class="notif-detail">
+                                    Order #<span th:text="${no.id}"></span> ·
+                                    LKR <span th:text="${#numbers.formatDecimal(no.totalAmount,1,2)}"></span>
+                                </div>
+                                <div class="notif-time"
+                                     th:text="${#temporals.format(no.createdAt,'MMM dd, HH:mm')}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li><a href="/admin/orders/search">🔍 Search</a></li>
+        <li><a href="/logout">Sign Out</a></li>
+    </ul>
+</nav>
+
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-label">Menu</div>
+            <a href="/admin/dashboard" class="sidebar-link filter-active">
+                <span>📋</span> All Orders
+            </a>
+            <a href="/admin/orders/search" class="sidebar-link">
+                <span>🔍</span> Search Orders
+            </a>
+        </div>
+        <div class="sidebar-section" style="margin-top:1rem">
+            <div class="sidebar-label">Quick Filters</div>
+            <button class="sidebar-link" onclick="filterByStatus('ALL',this)">
+                <span>📦</span> All Orders
+            </button>
+            <button class="sidebar-link" onclick="filterByStatus('PENDING',this)">
+                <span>🟡</span> Pending
+            </button>
+            <button class="sidebar-link" onclick="filterByStatus('CONFIRMED',this)">
+                <span>🔵</span> Confirmed
+            </button>
+            <button class="sidebar-link" onclick="filterByStatus('IN_PREPARATION',this)">
+                <span>🟣</span> Baking
+            </button>
+            <button class="sidebar-link" onclick="filterByStatus('READY',this)">
+                <span>🟢</span> Ready
+            </button>
+            <button class="sidebar-link" onclick="filterByStatus('DELIVERED',this)">
+                <span>✅</span> Delivered
+            </button>
+            <button class="sidebar-link" onclick="filterByStatus('CANCELLED',this)">
+                <span>❌</span> Cancelled
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <!-- Flash messages -->
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}"   class="alert alert-error"   th:text="${error}"></div>
+
+        <!-- Stats — counts passed from Java, no stream expressions in Thymeleaf -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div>
+                    <div class="stat-value" th:text="${#lists.size(allOrders)}">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+            </div>
+            <div class="stat-card" style="border-left-color:#FFC107">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#FFC107,#FF9800)">🕐</div>
+                <div>
+                    <div class="stat-value" th:text="${pendingCount}">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+            <div class="stat-card" style="border-left-color:#3498DB">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#3498DB,#2980B9)">🔥</div>
+                <div>
+                    <div class="stat-value" th:text="${bakingCount}">0</div>
+                    <div class="stat-label">Baking</div>
+                </div>
+            </div>
+            <div class="stat-card" style="border-left-color:#28A745">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#28A745,#20C997)">✅</div>
+                <div>
+                    <div class="stat-value" th:text="${deliveredCount}">0</div>
+                    <div class="stat-label">Delivered</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders list -->
+        <div class="orders-section">
+            <div class="orders-header">
+                <h2>
+                    <span th:if="${newOrderCount > 0}" class="new-pulse"></span>
+                    📦 Incoming Orders
+                </h2>
+                <span id="orderCountLabel" style="font-size:0.85rem;color:rgba(230,168,85,0.7)"
+                      th:text="${#lists.size(allOrders)} + ' orders'"></span>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+                <span style="font-size:0.85rem;font-weight:600;color:var(--cocoa)">Filter:</span>
+                <select class="filter-select" id="statusFilter"
+                        onchange="filterByStatus(this.value, null)">
+                    <option value="ALL">All Statuses</option>
+                    <option value="PENDING">⏳ Pending</option>
+                    <option value="CONFIRMED">✅ Confirmed</option>
+                    <option value="IN_PREPARATION">🔥 In Preparation</option>
+                    <option value="READY">📦 Ready</option>
+                    <option value="DELIVERED">🚚 Delivered</option>
+                    <option value="CANCELLED">✕ Cancelled</option>
+                </select>
+                <span class="visible-count" id="visibleCount"></span>
+                <a href="/admin/orders/search" class="btn btn-outline btn-sm">🔍 Advanced Search</a>
+            </div>
+
+            <!-- Order rows -->
+            <div id="ordersList">
+
+                <div th:if="${#lists.isEmpty(allOrders)}" class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <h3>No orders yet</h3>
+                    <p>Orders placed by customers will appear here.</p>
+                </div>
+
+                <div th:each="order, stat : ${allOrders}"
+                     class="order-row"
+                     th:data-status="${order.status}"
+                     th:id="'row-' + ${order.id}"
+                >
+
+                    <!-- Clickable header row -->
+                    <div class="order-row-main" th:data-id="${order.id}" onclick="toggleRow(this.dataset.id)">
+                        <div class="col-id" th:text="'#' + ${order.id}">#1</div>
+                        <div class="col-customer">
+                            <strong th:text="${order.customerName}">Name</strong>
+                            <span th:text="${order.customerEmail}">email</span>
+                        </div>
+                        <div>
+              <span class="status-badge"
+                    th:classappend="'status-' + ${order.status}"
+                    th:text="${order.status.replace('_',' ')}">PENDING</span>
+                        </div>
+                        <div class="col-total"
+                             th:text="'LKR ' + ${#numbers.formatDecimal(order.totalAmount,1,2)}">LKR 0</div>
+                        <div class="col-time"
+                             th:text="${#temporals.format(order.createdAt,'MMM dd, HH:mm')}">Jan 01</div>
+                        <div class="expand-arrow">▼</div>
+                    </div>
+
+                    <!-- Expandable detail -->
+                    <div class="order-row-detail" th:id="'detail-' + ${order.id}">
+
+                        <!-- Items -->
+                        <div class="items-display">
+                            <strong>🍫 Items ordered:</strong>
+                            <span th:each="item : ${order.items}" class="item-tag"
+                                  th:text="${item.quantity} + 'x ' + ${item.productName} +
+                      (${item.customization != null and !#strings.isEmpty(item.customization)}
+                      ? ' (' + ${item.customization} + ')' : '')">item</span>
+                        </div>
+
+                        <!-- Delivery info -->
+                        <div class="delivery-info" th:if="${order.deliveryAddress != null}">
+                            📍 <strong>Deliver to:</strong>
+                            <span th:text="${order.deliveryAddress}"></span>
+                        </div>
+                        <div class="delivery-info" th:unless="${order.deliveryAddress != null}">
+                            🏪 <strong>Pickup order</strong>
+                        </div>
+                        <div class="delivery-info" th:if="${order.requestedTime != null}">
+                            🕐 <strong>Requested time:</strong>
+                            <span th:text="${#temporals.format(order.requestedTime,'MMM dd yyyy, HH:mm')}"></span>
+                        </div>
+
+                        <!-- Existing notes displayed -->
+                        <div class="note-display note-customer" th:if="${order.customerNote != null and !#strings.isEmpty(order.customerNote)}">
+                            💬 <strong>Customer note:</strong> <span th:text="${order.customerNote}"></span>
+                        </div>
+                        <div class="note-display note-admin" th:if="${order.adminNote != null and !#strings.isEmpty(order.adminNote)}">
+                            📋 <strong>Admin note:</strong> <span th:text="${order.adminNote}"></span>
+                        </div>
+
+                        <!-- 3 action forms -->
+                        <div class="detail-forms">
+
+                            <!-- Form 1: Update Status -->
+                            <div>
+                                <label class="form-label-sm">🔄 Update Status</label>
+                                <form method="post"
+                                      th:action="@{|/admin/orders/${order.id}/status|}">
+                                    <select name="status" class="status-select">
+                                        <option value="PENDING"
+                                                th:selected="${order.status == 'PENDING'}">⏳ Pending</option>
+                                        <option value="CONFIRMED"
+                                                th:selected="${order.status == 'CONFIRMED'}">✅ Confirmed</option>
+                                        <option value="IN_PREPARATION"
+                                                th:selected="${order.status == 'IN_PREPARATION'}">🔥 In Preparation</option>
+                                        <option value="READY"
+                                                th:selected="${order.status == 'READY'}">📦 Ready</option>
+                                        <option value="DELIVERED"
+                                                th:selected="${order.status == 'DELIVERED'}">🚚 Delivered</option>
+                                        <option value="CANCELLED"
+                                                th:selected="${order.status == 'CANCELLED'}">✕ Cancelled</option>
+                                    </select>
+                                    <button type="submit" class="action-btn btn-brown">Update →</button>
+                                </form>
+                            </div>
+
+                            <!-- Form 2: Admin Internal Note -->
+                            <div>
+                                <label class="form-label-sm">📋 Admin Internal Note</label>
+                                <form method="post"
+                                      th:action="@{|/admin/orders/${order.id}/note|}">
+                  <textarea name="adminNote" class="note-area"
+                            placeholder="e.g. Check for nut allergy..."
+                            th:text="${order.adminNote}"></textarea>
+                                    <button type="submit" class="action-btn btn-brown">💾 Save Note</button>
+                                </form>
+                            </div>
+
+                            <!-- Form 3: Edit Customer Special Note -->
+                            <div>
+                                <label class="form-label-sm" style="color:#0C5460">💬 Customer Special Note</label>
+                                <form method="post"
+                                      th:action="@{|/admin/orders/${order.id}/customer-note|}">
+                  <textarea name="customerNote" class="note-area"
+                            style="border-color:#17A2B8"
+                            placeholder="Edit customer's special request..."
+                            th:text="${order.customerNote}"></textarea>
+                                    <button type="submit" class="action-btn btn-teal">✏️ Update Note</button>
+                                </form>
+                            </div>
+
+                        </div><!-- end detail-forms -->
+                    </div><!-- end order-row-detail -->
+                </div><!-- end th:each -->
+
+            </div><!-- end ordersList -->
+        </div><!-- end orders-section -->
+
+    </main>
+</div>
+
+<script>
+    // ---- Expand/collapse a single order row by ID ----
+    // orderId comes as a string from dataset.id — that is fine for getElementById
+    function toggleRow(orderId) {
+        const detail = document.getElementById('detail-' + orderId);
+        const row    = document.getElementById('row-'    + orderId);
+        if (!detail || !row) return;
+
+        const isOpen = row.classList.contains('expanded');
+
+        // Close all open rows first
+        document.querySelectorAll('.order-row.expanded').forEach(r => {
+            r.classList.remove('expanded');
+            const rid = r.id.replace('row-', '');
+            const d = document.getElementById('detail-' + rid);
+            if (d) d.classList.remove('open');
+        });
+
+        // Open clicked row if it was closed
+        if (!isOpen) {
+            row.classList.add('expanded');
+            detail.classList.add('open');
+        }
+    }
+
+    // ---- Filter orders by status ----
+    // Works for both dropdown change and sidebar button clicks
+    function filterByStatus(status, sidebarBtn) {
+        // Sync dropdown
+        const dropdown = document.getElementById('statusFilter');
+        if (dropdown) dropdown.value = status;
+
+        // Highlight active sidebar button
+        document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('filter-active'));
+        if (sidebarBtn) sidebarBtn.classList.add('filter-active');
+
+        // Show/hide rows
+        let shown = 0;
+        document.querySelectorAll('.order-row').forEach(row => {
+            const match = (status === 'ALL' || row.dataset.status === status);
+            row.style.display = match ? 'block' : 'none';
+            if (match) shown++;
+        });
+
+        // Update count label
+        const label = document.getElementById('orderCountLabel');
+        if (label) label.textContent = shown + (status === 'ALL' ? ' orders' : ' shown');
+
+        const vc = document.getElementById('visibleCount');
+        if (vc) vc.textContent = shown + ' visible';
+    }
+
+    // ---- Notification panel ----
+    function toggleNotif(e) {
+        e.stopPropagation();
+        document.getElementById('notifPanel').classList.toggle('open');
+    }
+
+    // Close panel when clicking outside
+    document.addEventListener('click', () => {
+        const p = document.getElementById('notifPanel');
+        if (p) p.classList.remove('open');
+    });
+
+    // Scroll to the order row for a clicked notification
+    function closeNotifAndScroll(orderId) {
+        document.getElementById('notifPanel').classList.remove('open');
+        const row = document.getElementById('row-' + orderId);
+        if (row) {
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => toggleRow(orderId), 400);
+        }
+    }
+
+    // ---- Mark all notifications as read ----
+    async function markAllRead() {
+        try {
+            await fetch('/admin/notifications/mark-read', { method: 'POST' });
+            const dot = document.getElementById('notifDot');
+            if (dot) dot.remove();
+            document.getElementById('notifList').innerHTML =
+                '<div class="notif-empty">✅ All caught up! No new orders.</div>';
+            document.getElementById('notifTitle').textContent = '🔔 Notifications (0)';
+        } catch(e) { console.error(e); }
+    }
+
+    // ---- Poll every 30 s for new order count ----
+    setInterval(async () => {
+        try {
+            const data = await fetch('/admin/notifications').then(r => r.json());
+            const dot  = document.getElementById('notifDot');
+            const title = document.getElementById('notifTitle');
+            if (data.count > 0) {
+                if (!dot) {
+                    const btn = document.getElementById('notifBellBtn');
+                    const nd = document.createElement('span');
+                    nd.className = 'notif-red-dot'; nd.id = 'notifDot';
+                    btn.appendChild(nd);
+                }
+                if (title) title.textContent = '🔔 New Orders (' + data.count + ')';
+            } else {
+                if (dot) dot.remove();
+                if (title) title.textContent = '🔔 Notifications (0)';
+            }
+        } catch(e) {}
+    }, 30000);
+</script>
+</body>
+</html>

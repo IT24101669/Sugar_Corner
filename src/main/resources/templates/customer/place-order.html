@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<!-- File: src/main/resources/templates/customer/place-order.html
+     Covers: US-2 (place order for brownies online) -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Place Order — Brownie Shop</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .order-builder {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) { .order-builder { grid-template-columns: 1fr; } }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        .menu-item:hover {
+            border-color: var(--caramel);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item.in-cart { border-color: var(--caramel); background: rgba(196,123,58,0.04); }
+
+        .menu-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+        .menu-name { font-weight: 600; font-size: 0.88rem; color: var(--chocolate); }
+        .menu-price { color: var(--caramel); font-weight: 700; font-size: 0.95rem; margin: 0.25rem 0; }
+        .menu-desc { font-size: 0.75rem; color: var(--cocoa); }
+
+        .add-btn {
+            margin-top: 0.75rem;
+            padding: 0.4rem 1rem;
+            background: var(--caramel);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .add-btn:hover { background: var(--cocoa); }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+            border-top: 5px solid var(--caramel);
+        }
+
+        .cart-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--chocolate);
+            margin-bottom: 1rem;
+        }
+
+        .cart-items { min-height: 100px; margin-bottom: 1rem; }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--cream);
+            animation: fadeInDown 0.3s ease;
+        }
+
+        .cart-item-name { font-size: 0.85rem; font-weight: 600; color: var(--dark); }
+        .cart-item-sub { font-size: 0.75rem; color: var(--cocoa); }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .qty-btn {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--caramel);
+            background: white;
+            color: var(--caramel);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover { background: var(--caramel); color: white; }
+        .qty-num { font-weight: 700; font-size: 0.9rem; min-width: 20px; text-align: center; }
+
+        .cart-empty {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--cocoa);
+            font-size: 0.88rem;
+        }
+
+        .cart-empty-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+        .cart-total {
+            padding: 0.75rem 0;
+            border-top: 2px solid var(--chocolate);
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            color: var(--chocolate);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-form { border-top: 1px solid var(--cream); padding-top: 1rem; }
+
+        .custom-input-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .custom-input-row input {
+            flex: 1;
+            padding: 0.35rem 0.75rem;
+            border: 1.5px solid #E8D5C0;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+        }
+
+        .custom-input-row input:focus { border-color: var(--caramel); }
+
+        .btn-place {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, var(--caramel), var(--cocoa));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'DM Sans', sans-serif;
+            margin-top: 0.5rem;
+        }
+
+        .btn-place:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,61,30,0.4); }
+        .btn-place:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(27,13,5,0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            display: none;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 400px;
+            animation: scaleIn 0.4s ease;
+        }
+
+        .success-icon { font-size: 4rem; animation: float 2s ease-in-out infinite; margin-bottom: 1rem; }
+
+        .menu-category { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cocoa); margin: 1.5rem 0 0.75rem; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/customer/dashboard" class="navbar-brand">🍫 <span>Brownie Shop</span></a>
+    <ul class="navbar-nav">
+        <li><a href="/customer/dashboard">My Orders</a></li>
+        <li><a href="/customer/orders/place" style="color:var(--gold)">🛒 Order</a></li>
+        <li><a href="/logout">Sign Out</a></li>
+    </ul>
+</nav>
+
+<div class="page-container">
+
+    <!-- Reorder success banner — only shown when arriving from a reorder -->
+    <div th:if="${reorderSuccess}" class="alert alert-success" style="
+       background:linear-gradient(135deg,#d4edda,#c3e6cb);
+       border-left:4px solid #28a745;border-radius:8px;
+       padding:0.85rem 1.2rem;margin-bottom:1.25rem;
+       display:flex;align-items:center;gap:0.6rem;
+       font-size:0.88rem;color:#155724;animation:fadeInDown 0.4s ease;">
+        ✅ <span th:text="${reorderSuccess}">Cart pre-filled!</span>
+        &nbsp;You can change quantities or customizations before confirming.
+    </div>
+
+    <div class="page-header">
+        <h1>🛒 Place Your Order</h1>
+        <p>Choose your brownies, customize them, and we'll deliver straight to you!</p>
+    </div>
+
+    <div class="order-builder">
+        <!-- Menu Section -->
+        <div>
+            <p class="menu-category">🍫 Classic Brownies</p>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="addToCart(this)" data-name="Classic Chocolate Brownie" data-price="350">
+                    <span class="menu-emoji">🍫</span>
+                    <div class="menu-name">Classic Chocolate</div>
+                    <div class="menu-price">LKR 350</div>
+                    <div class="menu-desc">Rich cocoa fudge with a crinkle top</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+                <div class="menu-item" onclick="addToCart(this)" data-name="Double Fudge Brownie" data-price="420">
+                    <span class="menu-emoji">🍪</span>
+                    <div class="menu-name">Double Fudge</div>
+                    <div class="menu-price">LKR 420</div>
+                    <div class="menu-desc">Extra fudgy with chocolate chips</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+                <div class="menu-item" onclick="addToCart(this)" data-name="Walnut Brownie" data-price="400">
+                    <span class="menu-emoji">🌰</span>
+                    <div class="menu-name">Walnut Brownie</div>
+                    <div class="menu-price">LKR 400</div>
+                    <div class="menu-desc">Crunchy walnuts in every bite</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+                <div class="menu-item" onclick="addToCart(this)" data-name="Cream Cheese Brownie" data-price="480">
+                    <span class="menu-emoji">🧀</span>
+                    <div class="menu-name">Cream Cheese</div>
+                    <div class="menu-price">LKR 480</div>
+                    <div class="menu-desc">Swirled with cream cheese filling</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+            </div>
+
+            <p class="menu-category">✨ Premium Brownies</p>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="addToCart(this)" data-name="Salted Caramel Brownie" data-price="550">
+                    <span class="menu-emoji">🍮</span>
+                    <div class="menu-name">Salted Caramel</div>
+                    <div class="menu-price">LKR 550</div>
+                    <div class="menu-desc">Gooey caramel with sea salt flakes</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+                <div class="menu-item" onclick="addToCart(this)" data-name="Nutella Swirl Brownie" data-price="580">
+                    <span class="menu-emoji">🫙</span>
+                    <div class="menu-name">Nutella Swirl</div>
+                    <div class="menu-price">LKR 580</div>
+                    <div class="menu-desc">Hazelnut heaven in brownie form</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+                <div class="menu-item" onclick="addToCart(this)" data-name="Oreo Brownie" data-price="520">
+                    <span class="menu-emoji">⚫</span>
+                    <div class="menu-name">Oreo Brownie</div>
+                    <div class="menu-price">LKR 520</div>
+                    <div class="menu-desc">Crushed Oreos baked inside</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+                <div class="menu-item" onclick="addToCart(this)" data-name="Brownie Box (6pcs)" data-price="1800">
+                    <span class="menu-emoji">🎁</span>
+                    <div class="menu-name">Brownie Box 6pcs</div>
+                    <div class="menu-price">LKR 1,800</div>
+                    <div class="menu-desc">Assorted box — perfect gift!</div>
+                    <button class="add-btn">+ Add</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-sidebar">
+            <div class="cart-title">🛒 Your Cart</div>
+
+            <div class="cart-items" id="cartItems">
+                <div class="cart-empty">
+                    <span class="cart-empty-icon">🛒</span>
+                    Add brownies to get started!
+                </div>
+            </div>
+
+            <div class="cart-total" id="cartTotal" style="display:none">
+                <span>Total</span>
+                <span id="totalDisplay">LKR 0.00</span>
+            </div>
+
+            <!-- Order Details Form -->
+            <div class="order-form">
+                <div class="form-group">
+                    <label class="form-label">Order Type</label>
+                    <select class="form-control form-select" id="orderType" onchange="toggleDelivery()">
+                        <option value="DELIVERY">🚚 Delivery</option>
+                        <option value="PICKUP">🏪 Pickup</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="addressGroup">
+                    <label class="form-label">Delivery Address</label>
+                    <input type="text" class="form-control" id="deliveryAddress"
+                           placeholder="Enter your full address"
+                           th:value="${customer.address}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Requested Time</label>
+                    <input type="datetime-local" class="form-control" id="requestedTime">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Special Instructions (optional)</label>
+                    <textarea class="form-control" id="customerNote" rows="2"
+                              placeholder="e.g., no nuts, extra packaging..."></textarea>
+                </div>
+
+                <button class="btn-place" id="placeBtn" onclick="placeOrder()" disabled>
+                    🍫 Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Overlay -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+        <div class="success-icon">🎉</div>
+        <h2 style="font-family:'Playfair Display',serif;color:var(--chocolate);margin-bottom:0.5rem">Order Placed!</h2>
+        <p style="color:var(--cocoa);margin-bottom:1.5rem" id="successMsg">Your brownies are on their way!</p>
+        <a href="/customer/dashboard" class="btn btn-primary">View My Orders</a>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const cart = {}; // { productName: { name, price, qty, customization } }
+
+    // ---- REORDER: Auto-populate cart from previous order ----
+    // th:inline="javascript" on the <script> tag makes Thymeleaf process
+    // /*[[...]]*/  expressions — without it they stay as the comment null.
+    // reorderItems is a List<OrderItemResponse> stored in the HTTP session by
+    // CustomerController.reorder() and passed to the model in placeOrderPage().
+    (function() {
+        const reorderItems = /*[[${reorderItems}]]*/ null;
+        if (!reorderItems || reorderItems.length === 0) return;
+
+        reorderItems.forEach(item => {
+            const name  = item.productName;
+            // unitPrice is a BigDecimal — Thymeleaf serialises it as a number in JS
+            const price = parseFloat(item.unitPrice);
+            const qty   = parseInt(item.quantity, 10);
+            if (!name || isNaN(price) || qty < 1) return;
+
+            if (!cart[name]) {
+                cart[name] = { name, price, qty: 0, customization: '' };
+            }
+            cart[name].qty          += qty;
+            cart[name].customization = item.customization || '';
+
+            // Highlight the matching menu card so customer can see what was added
+            document.querySelectorAll('.menu-item').forEach(el => {
+                if (el.dataset.name === name) el.classList.add('in-cart');
+            });
+        });
+
+        renderCart();
+    })();
+
+    function addToCart(el) {
+        const name = el.dataset.name;
+        const price = parseFloat(el.dataset.price);
+
+        if (!cart[name]) {
+            cart[name] = { name, price, qty: 0, customization: '' };
+        }
+        cart[name].qty++;
+        el.classList.add('in-cart');
+        renderCart();
+    }
+
+    function changeQty(name, delta) {
+        if (!cart[name]) return;
+        cart[name].qty += delta;
+        if (cart[name].qty <= 0) delete cart[name];
+        renderCart();
+    }
+
+    function renderCart() {
+        const container = document.getElementById('cartItems');
+        const totalEl = document.getElementById('cartTotal');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const placeBtn = document.getElementById('placeBtn');
+
+        const keys = Object.keys(cart);
+
+        if (keys.length === 0) {
+            container.innerHTML = `<div class="cart-empty"><span class="cart-empty-icon">🛒</span>Add brownies to get started!</div>`;
+            totalEl.style.display = 'none';
+            placeBtn.disabled = true;
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = keys.map(k => {
+            const item = cart[k];
+            total += item.price * item.qty;
+            return `
+        <div class="cart-item">
+          <div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-sub">LKR ${item.price.toFixed(2)} each</div>
+            <div class="custom-input-row">
+              <input type="text" placeholder="Customize..." value="${item.customization}"
+                     oninput="cart['${k}'].customization = this.value" style="width:140px">
+            </div>
+          </div>
+          <div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="changeQty('${k}', -1)">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${k}', 1)">+</button>
+            </div>
+            <div style="text-align:right;font-size:0.8rem;font-weight:700;color:var(--chocolate);margin-top:4px">
+              LKR ${(item.price * item.qty).toFixed(2)}
+            </div>
+          </div>
+        </div>`;
+        }).join('');
+
+        totalEl.style.display = 'flex';
+        totalDisplay.textContent = 'LKR ' + total.toFixed(2);
+        placeBtn.disabled = false;
+    }
+
+    function toggleDelivery() {
+        const type = document.getElementById('orderType').value;
+        document.getElementById('addressGroup').style.display = type === 'DELIVERY' ? 'block' : 'none';
+    }
+
+    async function placeOrder() {
+        const placeBtn = document.getElementById('placeBtn');
+        placeBtn.disabled = true;
+        placeBtn.innerHTML = '<span class="spinner"></span> Placing...';
+
+        const items = Object.values(cart).map(i => ({
+            productName: i.name,
+            quantity: i.qty,
+            unitPrice: i.price,
+            customization: i.customization || null
+        }));
+
+        const orderType = document.getElementById('orderType').value;
+        const body = {
+            orderType,
+            deliveryAddress: orderType === 'DELIVERY' ? document.getElementById('deliveryAddress').value : null,
+            requestedTime: document.getElementById('requestedTime').value || null,
+            customerNote: document.getElementById('customerNote').value || null,
+            items
+        };
+
+        try {
+            const res = await fetch('/customer/orders/place', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                const order = await res.json();
+                document.getElementById('successMsg').textContent = `Order #${order.id} placed successfully! We'll start preparing your brownies soon. 🍫`;
+                document.getElementById('successOverlay').style.display = 'flex';
+            } else {
+                alert('Failed to place order. Please check your details and try again.');
+                placeBtn.disabled = false;
+                placeBtn.innerHTML = '🍫 Place Order';
+            }
+        } catch (e) {
+            alert('Connection error. Please try again.');
+            placeBtn.disabled = false;
+            placeBtn.innerHTML = '🍫 Place Order';
+        }
+    }
+
+    // Set default requested time to 1 hour from now
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+    document.getElementById('requestedTime').value = now.toISOString().slice(0, 16);
+</script>
+</body>
+</html>
