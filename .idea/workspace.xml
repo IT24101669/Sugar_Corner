@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="project database">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/da9878b5-dfae-452e-a8df-ba6d606c5479.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/da9878b5-dfae-452e-a8df-ba6d606c5479.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="kela wela weda nathi ewa">
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -140,6 +137,7 @@
       <workItem from="1774341527966" duration="70000" />
       <workItem from="1774343488190" duration="1218000" />
       <workItem from="1774351198611" duration="45000" />
+      <workItem from="1774351271529" duration="387000" />
     </task>
     <task id="LOCAL-00001" summary="project folder structure">
       <option name="closed" value="true" />
@@ -253,7 +251,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773986593806</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="kela wela weda nathi ewa">
+      <option name="closed" value="true" />
+      <created>1774351394123</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1774351394123</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -294,6 +300,7 @@
     <MESSAGE value="project request classes" />
     <MESSAGE value="project java classes file" />
     <MESSAGE value="project database" />
-    <option name="LAST_COMMIT_MESSAGE" value="project database" />
+    <MESSAGE value="kela wela weda nathi ewa" />
+    <option name="LAST_COMMIT_MESSAGE" value="kela wela weda nathi ewa" />
   </component>
 </project>
