@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="" />
+    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="project database">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,14 +20,26 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/IT24101669/Sugar_Corner.git",
-    "accountId": "72a9a8c6-6213-4a5f-9ace-a5b6ade56858"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;IT24101669&quot;
   }
-}]]></component>
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IT24101669/Sugar_Corner.git&quot;,
+    &quot;accountId&quot;: &quot;72a9a8c6-6213-4a5f-9ace-a5b6ade56858&quot;
+  }
+}</component>
   <component name="MavenRunner">
     <option name="jreName" value="ms-21" />
   </component>
@@ -38,34 +52,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.BrowniesApplication.executor": "Run",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.BrowniesApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="BrowniesApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="brownies" />
@@ -112,8 +127,125 @@
       <workItem from="1773810426163" duration="10000" />
       <workItem from="1773815446197" duration="88000" />
       <workItem from="1773908930414" duration="863000" />
-      <workItem from="1773984030946" duration="961000" />
+      <workItem from="1773984030946" duration="2931000" />
+      <workItem from="1773996624089" duration="136000" />
+      <workItem from="1774238196783" duration="584000" />
+      <workItem from="1774333708475" duration="6000" />
+      <workItem from="1774334498315" duration="100000" />
     </task>
+    <task id="LOCAL-00001" summary="project folder structure">
+      <option name="closed" value="true" />
+      <created>1773985287959</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1773985287959</updated>
+    </task>
+    <task id="LOCAL-00002" summary="project folder structure">
+      <option name="closed" value="true" />
+      <created>1773985380245</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1773985380245</updated>
+    </task>
+    <task id="LOCAL-00003" summary="project folder structure">
+      <option name="closed" value="true" />
+      <created>1773985462679</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1773985462679</updated>
+    </task>
+    <task id="LOCAL-00004" summary="project application properties">
+      <option name="closed" value="true" />
+      <created>1773985947428</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1773985947428</updated>
+    </task>
+    <task id="LOCAL-00005" summary="project css classes">
+      <option name="closed" value="true" />
+      <created>1773986027240</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986027240</updated>
+    </task>
+    <task id="LOCAL-00006" summary="project controller classes">
+      <option name="closed" value="true" />
+      <created>1773986153958</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986153958</updated>
+    </task>
+    <task id="LOCAL-00007" summary="project service classes">
+      <option name="closed" value="true" />
+      <created>1773986204991</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986204991</updated>
+    </task>
+    <task id="LOCAL-00008" summary="project service classes">
+      <option name="closed" value="true" />
+      <created>1773986254576</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986254576</updated>
+    </task>
+    <task id="LOCAL-00009" summary="project repository classes">
+      <option name="closed" value="true" />
+      <created>1773986304750</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986304750</updated>
+    </task>
+    <task id="LOCAL-00010" summary="project config classes">
+      <option name="closed" value="true" />
+      <created>1773986398500</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986398500</updated>
+    </task>
+    <task id="LOCAL-00011" summary="project response classes">
+      <option name="closed" value="true" />
+      <created>1773986453438</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986453438</updated>
+    </task>
+    <task id="LOCAL-00012" summary="project request classes">
+      <option name="closed" value="true" />
+      <created>1773986503322</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986503322</updated>
+    </task>
+    <task id="LOCAL-00013" summary="project java classes file">
+      <option name="closed" value="true" />
+      <created>1773986556875</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986556875</updated>
+    </task>
+    <task id="LOCAL-00014" summary="project database">
+      <option name="closed" value="true" />
+      <created>1773986593806</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773986593806</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,7 +262,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/Order-management" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -141,5 +273,19 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="project folder structure" />
+    <MESSAGE value="project application properties" />
+    <MESSAGE value="project css classes" />
+    <MESSAGE value="project controller classes" />
+    <MESSAGE value="project service classes" />
+    <MESSAGE value="project repository classes" />
+    <MESSAGE value="project config classes" />
+    <MESSAGE value="project response classes" />
+    <MESSAGE value="project request classes" />
+    <MESSAGE value="project java classes file" />
+    <MESSAGE value="project database" />
+    <option name="LAST_COMMIT_MESSAGE" value="project database" />
   </component>
 </project>
