@@ -9,6 +9,9 @@
         <module name="brownies" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="brownies" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

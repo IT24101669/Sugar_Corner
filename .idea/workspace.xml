@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="project database">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/da9878b5-dfae-452e-a8df-ba6d606c5479.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/da9878b5-dfae-452e-a8df-ba6d606c5479.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,9 +63,10 @@
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.BrowniesApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -83,7 +87,7 @@
 }</component>
   <component name="RunManager">
     <configuration name="BrowniesApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="brownies" />
+      <module name="brownies-project" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.brownies.BrowniesApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -132,6 +136,10 @@
       <workItem from="1774238196783" duration="584000" />
       <workItem from="1774333708475" duration="6000" />
       <workItem from="1774334498315" duration="100000" />
+      <workItem from="1774341355067" duration="22000" />
+      <workItem from="1774341527966" duration="70000" />
+      <workItem from="1774343488190" duration="1218000" />
+      <workItem from="1774351198611" duration="45000" />
     </task>
     <task id="LOCAL-00001" summary="project folder structure">
       <option name="closed" value="true" />
