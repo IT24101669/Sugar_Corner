@@ -10,8 +10,10 @@ import lombok.Setter;
 @Setter
 public class AdminSettings {
     @Id
-    private Long id = 1L; // සැමවිටම එකම ID එකක් භාවිතා කරයි
+    private Long id = 1L;
     private String adminEmail;
     private String adminPhone;
     private String adminAddress;
 }
+
+

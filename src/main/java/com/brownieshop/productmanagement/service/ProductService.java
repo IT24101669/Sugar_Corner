@@ -82,4 +82,17 @@ public class ProductService {
             p.setAvailable(true);
         }
     }
+    // ProductService එකේ
+    public Product reduceStock(Long productId, Integer quantityToReduce) {
+        Product product = getProductById(productId);
+
+        if (product.getQuantity() < quantityToReduce) {
+            throw new RuntimeException("Insufficient stock");
+        }
+
+        product.setQuantity(product.getQuantity() - quantityToReduce);
+        normalizeAvailability(product);
+
+        return repository.save(product);
+    }
 }
