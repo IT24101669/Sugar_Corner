@@ -110,4 +110,6 @@ public class ProductController {
     public ResponseEntity<List<Product>> getFeatured() {
         return ResponseEntity.ok(service.getFeaturedProducts());
     }
+
+
 }
