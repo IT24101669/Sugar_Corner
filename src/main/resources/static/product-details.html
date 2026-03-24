@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Product • Sugar Corner</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .star-rating span { cursor: pointer; transition: color 0.2s; }
+        .hidden { display: none; }
+    </style>
+</head>
+<div id="navbar-placeholder"></div>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/products.html" class="logo">
+            Sugar<span>Corner</span>
+        </a>
+        <div class="menu-toggle" id="menuToggle">☰</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/products.html">Shop</a></li>
+            <li><a href="/admin.html">product Admin Panel</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="video-overlay"></div>
+
+<div class="main-content">
+    <div class="container">
+        <div class="product-details-card" id="productDetails">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading product details...</p>
+            </div>
+        </div>
+
+        <div class="order-action-area mt-6">
+            <button class="btn btn-order" onclick="orderNow()">Order Now</button>
+        </div>
+
+        <div class="mt-10 bg-white rounded-xl shadow-lg p-8 mb-10">
+            <h3 class="text-2xl font-bold mb-6 text-[#451010]">Customer Reviews</h3>
+
+            <div id="existingFeedbacks" class="space-y-4 mb-8">
+                <p class="text-gray-500 italic">No reviews yet for this product.</p>
+            </div>
+
+            <hr class="my-8">
+
+            <button id="toggleFeedbackBtn" class="bg-[#8B5E3C] text-white px-6 py-2 rounded-lg hover:bg-[#6F4A30] transition">
+                Write a Review
+            </button>
+
+            <form id="productFeedbackForm" class="hidden mt-6 space-y-4 border-t pt-6 text-left">
+                <h4 class="font-semibold text-lg">Share your experience</h4>
+                <div class="flex gap-2 text-2xl text-gray-300 star-rating" id="detailStarRating">
+                    <span data-val="1">☆</span>
+                    <span data-val="2">☆</span>
+                    <span data-val="3">☆</span>
+                    <span data-val="4">☆</span>
+                    <span data-val="5">☆</span>
+                </div>
+                <input type="hidden" id="detailRatingValue" value="0">
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <input type="text" id="custName" placeholder="Your Name" required class="w-full p-2 border rounded focus:ring-2 focus:ring-amber-500 outline-none">
+                    <input type="email" id="custEmail" placeholder="Your Email" required class="w-full p-2 border rounded focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <textarea id="custMessage" placeholder="What do you think about this product?" rows="3" required class="w-full p-2 border rounded focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">Submit Review</button>
+            </form>
+        </div>
+
+        <div class="pb-10">
+            <a href="/products.html" class="btn btn-back">← Back to Shop</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    const container = document.getElementById('productDetails');
+
+    // 1. Product Details Load kirima
+    if (!productId) {
+        container.innerHTML = `<div class="error-state"><h2>Error</h2><p>No product ID provided.</p></div>`;
+    } else {
+        fetch(`/api/products/${productId}`)
+            .then(res => { if (!res.ok) throw new Error('Product not found'); return res.json(); })
+            .then(p => {
+                document.title = `${p.name} • Sugar Corner`;
+                const stockClass = p.available ? 'in-stock' : 'out-of-stock';
+                const stockText  = p.available ? 'In Stock' : 'Out of Stock';
+                const featured = p.featured ? `<span class="featured-badge">Featured ★</span>` : '';
+
+                container.innerHTML = `
+                    <div class="product-header">${featured}<h1 class="product-name">${p.name}</h1></div>
+                    <div class="product-image-container">
+                        <img src="${p.imageUrl || 'https://via.placeholder.com/900x600/6B4C2E/ffffff?text=' + encodeURIComponent(p.name)}" class="product-main-image" />
+                    </div>
+                    <div class="product-info">
+                        <div class="price-block"><div class="current-price">LKR ${p.price.toFixed(2)}</div></div>
+                        <div class="stock-status ${stockClass}">${stockText} • ${p.quantity || 0} remaining</div>
+                        <div class="category"><strong>Category:</strong> ${p.category || 'Uncategorized'}</div>
+                        <div class="description">${p.description || '<em>No description available yet...</em>'}</div>
+                    </div>`;
+                loadFeedbacks(); // Product load unama reviews load karanna
+            })
+            .catch(err => { container.innerHTML = `<div class="error-state"><h2>Oops...</h2><p>${err.message}</p></div>`; });
+    }
+
+    // 2. Feedback Form Logic
+    const toggleBtn = document.getElementById('toggleFeedbackBtn');
+    const feedbackForm = document.getElementById('productFeedbackForm');
+
+    toggleBtn.addEventListener('click', () => {
+        feedbackForm.classList.toggle('hidden');
+        toggleBtn.textContent = feedbackForm.classList.contains('hidden') ? 'Write a Review' : 'Cancel';
+    });
+
+    // Star Rating logic
+    const stars = document.querySelectorAll('#detailStarRating span');
+    stars.forEach(s => {
+        s.addEventListener('click', () => {
+            const val = s.dataset.val;
+            document.getElementById('detailRatingValue').value = val;
+            stars.forEach(st => {
+                st.textContent = st.dataset.val <= val ? '★' : '☆';
+                st.style.color = st.dataset.val <= val ? '#d97706' : '#954d4d';
+            });
+        });
+    });
+
+    // Submit Feedback
+    feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            customerName: document.getElementById('custName').value,
+            email: document.getElementById('custEmail').value,
+            rating: parseInt(document.getElementById('detailRatingValue').value),
+            // Message eke mulata product ID eka lassanata add karanawa filter karanna lesi wenna
+            message: `[Product ID: ${productId}] ` + document.getElementById('custMessage').value,
+            type: 'feedback'
+        };
+
+        try {
+            const res = await fetch('/api/support/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                alert("Thank you for your review!");
+                feedbackForm.reset();
+                feedbackForm.classList.add('hidden');
+                loadFeedbacks();
+            }
+        } catch (err) { alert("Failed to submit feedback."); }
+    });
+
+    // Load Feedbacks for this specific product
+    async function loadFeedbacks() {
+        try {
+            const res = await fetch('/api/support/feedback/all');
+            const data = await res.json();
+            const feedbackContainer = document.getElementById('existingFeedbacks');
+
+            // Filter: Message eke me product ID eka thiyena ewa pamanak ganna
+            const filtered = data.filter(f => f.message.includes(`[Product ID: ${productId}]`));
+
+            // feedback filter karana thana meka replace karanna
+            if (filtered.length > 0) {
+                feedbackContainer.innerHTML = filtered.map(f => `
+        <div class="border-b pb-4 mb-4">
+            <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-[#8B5E3C]">${f.customerName}</span>
+                <span class="text-amber-500">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</span>
+            </div>
+            <p class="text-gray-700">${f.message.replace(`[Product ID: ${productId}]`, '').trim()}</p>
+
+            ${f.adminReply ? `
+                <div class="ml-6 mt-2 p-3 bg-amber-50 border-l-4 border-amber-500 rounded">
+                    <p class="text-sm font-semibold text-amber-800">Admin Response:</p>
+                    <p class="text-sm text-gray-600">${f.adminReply}</p>
+                </div>
+            ` : ''}
+
+            <small class="text-gray-400">${new Date(f.submittedAt).toLocaleDateString()}</small>
+        </div>
+    `).join('');
+            }
+        } catch (err) { console.error("Error loading reviews", err); }
+    }
+
+    function orderNow() {
+        alert("Thank you! Your order request has been received.");
+    }
+
+    // Nav toggle
+    document.getElementById('menuToggle').addEventListener('click', () => {
+        document.getElementById('navLinks').classList.toggle('active');
+    });
+</script>
+</body>
+</html>
+product-details.html
