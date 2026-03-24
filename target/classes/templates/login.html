@@ -1,187 +1,81 @@
 <!DOCTYPE html>
-<!-- File: src/main/resources/templates/login.html -->
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Login — Brownie Shop</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <style>
-    body {
-      background: linear-gradient(135deg, #1A0D05 0%, #3B1F0A 50%, #6B3D1E 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-
-    .auth-container {
-      width: 100%;
-      max-width: 420px;
-      animation: scaleIn 0.5s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    .auth-logo {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .auth-logo h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: var(--gold);
-      font-style: italic;
-    }
-
-    .auth-logo p {
-      color: rgba(253,246,236,0.6);
-      font-size: 0.85rem;
-      margin-top: 0.25rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .brownie-icon {
-      font-size: 4rem;
-      display: block;
-      text-align: center;
-      margin-bottom: 0.5rem;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .auth-card {
-      background: rgba(255,255,255,0.97);
-      border-radius: 20px;
-      padding: 2.5rem;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.4);
-    }
-
-    .auth-card h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      color: var(--chocolate);
-      margin-bottom: 0.25rem;
-    }
-
-    .auth-card .subtitle {
-      color: var(--cocoa);
-      font-size: 0.88rem;
-      margin-bottom: 2rem;
-    }
-
-    .form-control {
-      background: #FAFAFA;
-    }
-
-    .btn-login {
-      width: 100%;
-      padding: 0.85rem;
-      background: linear-gradient(135deg, var(--caramel), var(--cocoa));
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-top: 0.5rem;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-login:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(107,61,30,0.4);
-    }
-
-    .btn-login:active { transform: translateY(0); }
-
-    .auth-footer {
-      text-align: center;
-      margin-top: 1.5rem;
-      font-size: 0.88rem;
-      color: var(--cocoa);
-    }
-
-    .auth-footer a {
-      color: var(--caramel);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .auth-footer a:hover { text-decoration: underline; }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-icon {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--caramel);
-      font-size: 1rem;
-    }
-
-    .input-wrapper .form-control {
-      padding-left: 2.8rem;
-    }
-
-    /* Chocolate drip animation on page load */
-    .drip-bar {
-      height: 5px;
-      background: linear-gradient(90deg, var(--caramel), var(--gold), var(--caramel));
-      background-size: 200% 100%;
-      border-radius: 3px 3px 0 0;
-      animation: shimmer 2s linear infinite;
-      margin-bottom: 0;
-      border-radius: 20px 20px 0 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Login - Brownie Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-  <div class="auth-container">
-    <div class="auth-logo">
-      <span class="brownie-icon">🍫</span>
-      <h1>Brownie Shop</h1>
-      <p>Order Management System</p>
-    </div>
 
-    <div class="auth-card">
-      <div class="drip-bar"></div>
-      <br>
-      <h2>Welcome back</h2>
-      <p class="subtitle">Sign in to your account to continue</p>
+<div class="auth-container">
+    <div class="auth-box">
 
-      <!-- Alert messages -->
-      <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-      <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Login to your Brownie Shop account</p>
 
-      <form method="post" action="/login">
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <div class="input-wrapper">
-            <span class="input-icon">✉</span>
-            <input type="email" name="username" class="form-control" placeholder="your@email.com" required autofocus>
-          </div>
+        <!-- Success messages -->
+        <div th:if="${param.registered}" class="alert alert-success">
+            Account created successfully! Please login.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            You have been logged out successfully.
+        </div>
+        <div th:if="${param.reset}" class="alert alert-success">
+            Password reset successfully! Please login.
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <div class="input-wrapper">
-            <span class="input-icon">🔒</span>
-            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
-          </div>
+        <!-- Error message -->
+        <div th:if="${error}" class="alert alert-error">
+            <span th:text="${error}"></span>
         </div>
 
-        <button type="submit" class="btn-login">Sign In →</button>
-      </form>
+        <!-- Login form -->
+        <form action="/login" method="post">
 
-      <div class="auth-footer">
-        New customer? <a href="/register">Create an account</a>
-      </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email"
+                       name="email"
+                       placeholder="Enter your email"
+                       required/>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Enter your password"
+                           required/>
+                    <span class="eye-icon" onclick="togglePassword('password', this)">👁</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Login</button>
+
+        </form>
+
+        <div class="auth-links">
+            <a href="/reset-password">Forgot your password?</a>
+            <span> | </span>
+            <a href="/register">Create an account</a>
+        </div>
+
     </div>
-  </div>
+</div>
+
+<script>
+    function togglePassword(fieldId, icon) {
+        const input = document.getElementById(fieldId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            icon.textContent = '👁';
+        }
+    }
+</script>
 </body>
 </html>

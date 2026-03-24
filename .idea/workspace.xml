@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="hari giya bn">
+    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="hede hari hutto">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/register.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +138,7 @@
       <workItem from="1774238196783" duration="584000" />
       <workItem from="1774333708475" duration="6000" />
       <workItem from="1774334498315" duration="100000" />
-      <workItem from="1774350102347" duration="1375000" />
+      <workItem from="1774350102347" duration="2240000" />
     </task>
     <task id="LOCAL-00001" summary="project folder structure">
       <option name="closed" value="true" />
@@ -257,7 +260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774350249372</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="hede hari hutto">
+      <option name="closed" value="true" />
+      <created>1774351845162</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1774351845162</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -300,6 +311,7 @@
     <MESSAGE value="project database" />
     <MESSAGE value="Merge pull request #2 from IT24101669/Product-management&#10;&#10;Product management" />
     <MESSAGE value="hari giya bn" />
-    <option name="LAST_COMMIT_MESSAGE" value="hari giya bn" />
+    <MESSAGE value="hede hari hutto" />
+    <option name="LAST_COMMIT_MESSAGE" value="hede hari hutto" />
   </component>
 </project>
