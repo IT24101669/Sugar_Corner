@@ -4,8 +4,8 @@ package com.example.brownies.repository;
 // Fix: Removed findByIdContaining(Long) — "Containing" means SQL LIKE which
 //      only works on Strings. For Long ID lookup, use findById() directly.
 
-import com.example.brownies.entity.Order;
-import com.example.brownies.entity.User;
+import com.example.brownies.model.Order;
+import com.example.brownies.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

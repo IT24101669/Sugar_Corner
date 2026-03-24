@@ -7,7 +7,7 @@ package com.example.brownies.service;
 //          - Loading user for Spring Security authentication
 // ==========================================
 
-import com.example.brownies.entity.User;
+import com.example.brownies.model.User;
 import com.example.brownies.repository.UserRepository;
 import com.example.brownies.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("Email already registered: " + email);
         }
 
-        // Build new User entity
+        // Build new User model
         User user = new User();
         user.setFullName(fullName);
         user.setEmail(email);

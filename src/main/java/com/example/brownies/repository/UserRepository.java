@@ -2,11 +2,11 @@ package com.example.brownies.repository;
 
 // ==========================================
 // File: src/main/java/com/example/brownies/repository/UserRepository.java
-// Purpose: JPA Repository for User entity
+// Purpose: JPA Repository for User model
 //          Provides DB access methods for user lookup
 // ==========================================
 
-import com.example.brownies.entity.User;
+import com.example.brownies.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,12 +2,12 @@ package com.example.brownies.repository;
 
 // ==========================================
 // File: src/main/java/com/example/brownies/repository/OrderItemRepository.java
-// Purpose: JPA Repository for OrderItem entity
+// Purpose: JPA Repository for OrderItem model
 //          Handles line-item level queries
 // ==========================================
 
-import com.example.brownies.entity.Order;
-import com.example.brownies.entity.OrderItem;
+import com.example.brownies.model.Order;
+import com.example.brownies.model.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

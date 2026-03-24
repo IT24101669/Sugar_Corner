@@ -1,6 +1,6 @@
-package com.example.brownies.entity;
+package com.example.brownies.model;
 
-// File: src/main/java/com/example/brownies/entity/Order.java
+// File: src/main/java/com/example/brownies/model/Order.java
 // Lombok removed — manual getters/setters for Java 24 compatibility
 
 import jakarta.persistence.*;

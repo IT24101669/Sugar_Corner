@@ -15,9 +15,9 @@ package com.example.brownies.service;
 // ==========================================
 
 import com.example.brownies.dto.*;
-import com.example.brownies.entity.Order;
-import com.example.brownies.entity.OrderItem;
-import com.example.brownies.entity.User;
+import com.example.brownies.model.Order;
+import com.example.brownies.model.OrderItem;
+import com.example.brownies.model.User;
 import com.example.brownies.repository.OrderItemRepository;
 import com.example.brownies.repository.OrderRepository;
 import com.example.brownies.util.Constants;
@@ -53,7 +53,7 @@ public class OrderService {
             throw new RuntimeException("Delivery address is required for delivery orders.");
         }
 
-        // Create new Order entity
+        // Create new Order model
         Order order = new Order();
         order.setCustomer(customer);
         order.setStatus(Constants.STATUS_PENDING); // All new orders start as PENDING
@@ -289,7 +289,7 @@ public class OrderService {
     }
 
     /**
-     * Map Order entity to OrderResponse DTO.
+     * Map Order model to OrderResponse DTO.
      * Includes mapping all OrderItems to OrderItemResponse DTOs.
      */
     private OrderResponse mapToResponse(Order order) {

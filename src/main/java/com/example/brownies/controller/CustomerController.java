@@ -3,7 +3,7 @@ package com.example.brownies.controller;
 import com.example.brownies.dto.OrderItemResponse;
 import com.example.brownies.dto.OrderRequest;
 import com.example.brownies.dto.OrderResponse;
-import com.example.brownies.entity.User;
+import com.example.brownies.model.User;
 import com.example.brownies.service.OrderService;
 import com.example.brownies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
