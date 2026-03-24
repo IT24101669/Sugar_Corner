@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Payment Handling Project
 
 ## Database Setup
@@ -31,3 +32,7 @@ FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 2. Run mvn clean install
 3. Run the application via IntelliJ or mvn spring-boot:run
 4. Access frontend at http://localhost:8080/payment.html
+=======
+# Sugar_Corner
+Web Based Brownies sales and order   management System 
+>>>>>>> 9c292c30f0b11330ebf22cda28831be0375c41a8
