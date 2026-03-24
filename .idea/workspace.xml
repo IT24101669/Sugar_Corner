@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="hari giya bn">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/model/Order.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,12 +35,12 @@
     &quot;assignee&quot;: &quot;IT24101669&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/IT24101669/Sugar_Corner.git",
-    "accountId": "c2a687be-6788-4d88-9b61-6462be3f9eac"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IT24101669/Sugar_Corner.git&quot;,
+    &quot;accountId&quot;: &quot;c2a687be-6788-4d88-9b61-6462be3f9eac&quot;
   }
-}]]></component>
+}</component>
   <component name="MavenRunner">
     <option name="jreName" value="ms-21" />
   </component>
@@ -49,7 +49,6 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="3A4M8wf7uZ4qOziM7GkW3oGETvf" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
