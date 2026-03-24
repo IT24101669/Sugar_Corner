@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="kela wela weda nathi ewa">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="hari giya bn">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/model/Order.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +35,12 @@
     &quot;assignee&quot;: &quot;IT24101669&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/IT24101669/Sugar_Corner.git&quot;,
-    &quot;accountId&quot;: &quot;72a9a8c6-6213-4a5f-9ace-a5b6ade56858&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/IT24101669/Sugar_Corner.git",
+    "accountId": "c2a687be-6788-4d88-9b61-6462be3f9eac"
   }
-}</component>
+}]]></component>
   <component name="MavenRunner">
     <option name="jreName" value="ms-21" />
   </component>
@@ -48,6 +49,7 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="3A4M8wf7uZ4qOziM7GkW3oGETvf" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -60,7 +62,6 @@
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.BrowniesApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -84,7 +85,7 @@
 }</component>
   <component name="RunManager">
     <configuration name="BrowniesApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="brownies-project" />
+      <module name="productManagement" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.brownies.BrowniesApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -94,11 +95,12 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+        <option value="bundled-jdk-9823dce3aa75-84258761d1cc-intellij.indexing.shared.core-IU-243.28141.18" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.28141.18" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="" />
@@ -133,11 +135,7 @@
       <workItem from="1774238196783" duration="584000" />
       <workItem from="1774333708475" duration="6000" />
       <workItem from="1774334498315" duration="100000" />
-      <workItem from="1774341355067" duration="22000" />
-      <workItem from="1774341527966" duration="70000" />
-      <workItem from="1774343488190" duration="1218000" />
-      <workItem from="1774351198611" duration="45000" />
-      <workItem from="1774351271529" duration="387000" />
+      <workItem from="1774350102347" duration="1375000" />
     </task>
     <task id="LOCAL-00001" summary="project folder structure">
       <option name="closed" value="true" />
@@ -251,13 +249,13 @@
       <option name="project" value="LOCAL" />
       <updated>1773986593806</updated>
     </task>
-    <task id="LOCAL-00015" summary="kela wela weda nathi ewa">
+    <task id="LOCAL-00015" summary="hari giya bn">
       <option name="closed" value="true" />
-      <created>1774351394123</created>
+      <created>1774350249371</created>
       <option name="number" value="00015" />
       <option name="presentableId" value="LOCAL-00015" />
       <option name="project" value="LOCAL" />
-      <updated>1774351394123</updated>
+      <updated>1774350249372</updated>
     </task>
     <option name="localTasksCounter" value="16" />
     <servers />
@@ -300,7 +298,8 @@
     <MESSAGE value="project request classes" />
     <MESSAGE value="project java classes file" />
     <MESSAGE value="project database" />
-    <MESSAGE value="kela wela weda nathi ewa" />
-    <option name="LAST_COMMIT_MESSAGE" value="kela wela weda nathi ewa" />
+    <MESSAGE value="Merge pull request #2 from IT24101669/Product-management&#10;&#10;Product management" />
+    <MESSAGE value="hari giya bn" />
+    <option name="LAST_COMMIT_MESSAGE" value="hari giya bn" />
   </component>
 </project>

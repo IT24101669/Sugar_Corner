@@ -1,12 +1,12 @@
 package com.example.brownies.model;
 
 // File: src/main/java/com/example/brownies/model/OrderItem.java
-// Lombok removed — manual getters/setters for Java 24 compatibility
+// Updated to resolve duplicate entity name conflict
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
+@Entity(name = "OrderItemModel") // මෙතනට "OrderItemModel" ලෙස නමක් දුන්නා
 @Table(name = "order_items")
 public class OrderItem {
 

@@ -1,13 +1,13 @@
 package com.example.brownies.model;
 
 // File: src/main/java/com/example/brownies/model/User.java
-// Lombok removed — manual getters/setters for Java 24 compatibility
+// Updated to resolve duplicate entity name conflict for 'User'
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Entity(name = "UserModel") // මෙතන Entity නම "UserModel" ලෙස වෙනස් කළා
 @Table(name = "users")
 public class User {
 
@@ -44,6 +44,7 @@ public class User {
 
     public User() {}
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
