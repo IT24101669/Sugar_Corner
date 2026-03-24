@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Admin Support Terminal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #f3f4f6; display: flex; justify-content: center; padding: 40px; }
+        .terminal { width: 500px; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 700px; }
+        #msgs { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 8px; max-width: 85%; }
+        .admin { align-self: flex-end; background: #10b981; color: white; }
+        .customer { align-self: flex-start; background: #e5e7eb; color: #111; }
+        .input-box { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { background: #1f2937; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+    <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div class="terminal">
+    <div style="background:#1f2937; color:white; padding:15px;">Admin Chat - ID: #<span id="iqId"></span></div>
+    <div id="msgs"></div>
+    <div class="input-box">
+        <input type="text" id="adminIn" placeholder="Write reply...">
+        <button onclick="reply()">Send Reply</button>
+    </div>
+</div>
+
+<script>
+    let stompClient = null;
+    const inquiryId = new URLSearchParams(window.location.search).get('id');
+    document.getElementById('iqId').innerText = inquiryId;
+
+    function connect() {
+        const socket = new SockJS('http://localhost:8081/ws-chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, () => {
+            stompClient.subscribe('/topic/inquiry/' + inquiryId, (res) => {
+                const m = JSON.parse(res.body);
+                const div = document.createElement('div');
+                div.className = `msg ${m.sender}`;
+                div.innerText = m.content;
+                document.getElementById('msgs').appendChild(div);
+                document.getElementById('msgs').scrollTop = 9999;
+            });
+        });
+    }
+
+    function reply() {
+        const input = document.getElementById('adminIn');
+        if(input.value.trim() && stompClient) {
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({
+                inquiryId: inquiryId, sender: 'admin', content: input.value, timestamp: new Date().toISOString()
+            }));
+            input.value = '';
+        }
+    }
+    if(inquiryId) connect();
+</script>
+</body>
+</html>
