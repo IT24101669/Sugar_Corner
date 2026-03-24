@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Customers - Brownie Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Brownie Shop Admin</div>
+    <div class="nav-links">
+        <a href="/admin/customers">Customers</a>
+        <a href="/admin/customers/loyalty">Loyal Customers</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="main-container">
+
+    <h2>Manage Customers</h2>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+        <form action="/admin/customers" method="get">
+            <div class="search-row">
+                <input type="text"
+                       name="keyword"
+                       th:value="${keyword}"
+                       placeholder="Search by name or email"/>
+                <button type="submit" class="btn-primary">Search</button>
+                <a th:if="${keyword != null and keyword != ''}"
+                   href="/admin/customers"
+                   class="btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Success message -->
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+
+    <!-- Error message -->
+    <div th:if="${error}" class="alert alert-error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Customers table -->
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Member Since</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer : ${customers}">
+            <td th:text="${customer.id}"></td>
+            <td th:text="${customer.fullName}"></td>
+            <td th:text="${customer.email}"></td>
+            <td th:text="${customer.phone}"></td>
+            <td th:text="${customer.role}"></td>
+            <td>
+                    <span th:if="${customer.isActive}"
+                          class="badge badge-active">Active</span>
+                <span th:unless="${customer.isActive}"
+                      class="badge badge-inactive">Blocked</span>
+            </td>
+            <td th:text="${customer.createdAt}"></td>
+            <td>
+                <form th:action="@{/admin/customers/toggle/{id}(id=${customer.id})}"
+                      method="post">
+                    <button type="submit"
+                            th:text="${customer.isActive} ? 'Block' : 'Unblock'"
+                            th:class="${customer.isActive} ? 'btn-danger' : 'btn-success'">
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+        <!-- No customers found -->
+        <tr th:if="${#lists.isEmpty(customers)}">
+            <td colspan="8" class="no-data">No customers found</td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

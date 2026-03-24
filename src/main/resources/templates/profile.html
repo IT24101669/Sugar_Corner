@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile - Brownie Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">🍫 Brownie Shop</div>
+    <div class="nav-links">
+        <a href="/profile">My Profile</a>
+        <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="profile-page">
+
+    <!-- Left side - avatar card -->
+    <div class="profile-sidebar">
+        <div class="avatar-container">
+            <div class="avatar-ring">
+                <div class="avatar-inner">
+                    <span class="avatar-initials"
+                          th:text="${#strings.substring(customer.fullName, 0, 1)}">
+                    </span>
+                </div>
+            </div>
+            <div class="avatar-pulse"></div>
+        </div>
+
+        <h3 th:text="${customer.fullName}">Customer Name</h3>
+        <p class="member-email" th:text="${customer.email}">email</p>
+
+        <div class="role-badge">
+            <span th:text="${customer.role}">CUSTOMER</span>
+        </div>
+
+        <div class="member-since">
+            <span>Member since</span>
+            <strong th:text="${#temporals.format(customer.createdAt, 'MMM yyyy')}">Jan 2024</strong>
+        </div>
+
+        <div class="sidebar-stats">
+            <div class="stat-item">
+                <span class="stat-icon">📦</span>
+                <span class="stat-label">Orders</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">📍</span>
+                <span class="stat-label" th:text="${customer.city != null ? customer.city : 'No city'}">City</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right side - form -->
+    <div class="profile-form-card">
+
+        <div class="form-header">
+            <h2>Edit Profile</h2>
+            <p>Update your personal information</p>
+        </div>
+
+        <!-- Success message -->
+        <div th:if="${success}" class="alert alert-success animated-alert">
+            ✓ <span th:text="${success}"></span>
+        </div>
+
+        <!-- Error message -->
+        <div th:if="${error}" class="alert alert-error animated-alert">
+            ✗ <span th:text="${error}"></span>
+        </div>
+
+        <form action="/profile/update" method="post" class="profile-form">
+
+            <div class="form-section-title">Personal Information</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text"
+                           name="fullName"
+                           th:value="${customer.fullName}"
+                           placeholder="Your full name"
+                           required/>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email"
+                           name="email"
+                           th:value="${customer.email}"
+                           placeholder="Your email"
+                           required/>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text"
+                           name="phone"
+                           th:value="${customer.phone}"
+                           placeholder="Your phone number"/>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date"
+                           name="dateOfBirth"
+                           th:value="${customer.dateOfBirth}"/>
+                </div>
+            </div>
+
+            <div class="form-section-title">Delivery Address</div>
+
+            <div class="form-group full-width">
+                <label>Street Address</label>
+                <input type="text"
+                       name="address"
+                       th:value="${customer.address}"
+                       placeholder="House no, Street name"/>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text"
+                           name="city"
+                           th:value="${customer.city}"
+                           placeholder="Your city"/>
+                </div>
+                <div class="form-group">
+                    <label>Postal Code</label>
+                    <input type="text"
+                           name="postalCode"
+                           th:value="${customer.postalCode}"
+                           placeholder="Postal code"/>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save">
+                <span>Save Changes</span>
+            </button>
+
+        </form>
+
+        <div class="change-password-link">
+            <a href="/reset-password">🔒 Change Password</a>
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>
