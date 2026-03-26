@@ -1,0 +1,25 @@
+<div th:replace="~{layout/main :: main(content='customer/dashboard')}">
+    <h1 class="text-4xl font-bold mb-8">Welcome back, <span th:text="${customer.fullName}"></span> 👋</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-3xl shadow flex flex-col">
+            <p class="text-orange-600">Active Orders</p>
+            <p class="text-6xl font-bold text-orange-500 mt-2" th:text="${activeOrders.size()}"></p>
+        </div>
+        <a href="/customer/orders/place" class="bg-orange-500 hover:bg-orange-600 text-white p-6 rounded-3xl shadow text-center text-2xl font-medium flex items-center justify-center">
+            Place New Order
+        </a>
+        <a href="/customer/orders/history" class="bg-white hover:bg-gray-50 p-6 rounded-3xl shadow text-center text-2xl font-medium flex items-center justify-center border border-orange-200">
+            View Order History
+        </a>
+    </div>
+
+    <h2 class="text-2xl font-semibold mt-12 mb-4">Recent Orders</h2>
+    <div th:each="order : ${activeOrders}" class="bg-white p-4 rounded-2xl shadow mb-4 flex justify-between items-center">
+        <div>
+            <span class="font-medium">Order #<span th:text="${order.id}"></span></span>
+            <span th:text="${order.status}" class="ml-3 text-xs px-3 py-1 bg-orange-100 text-orange-600 rounded-full"></span>
+        </div>
+        <button onclick="reorderOrder([[${order.id}]])" class="text-orange-600 hover:underline">Reorder Again →</button>
+    </div>
+</div>

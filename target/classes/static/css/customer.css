@@ -1,0 +1,21 @@
+/* Customer Dashboard & Place Order */
+.customer-header {
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+}
+
+.place-order-card {
+    border-radius: 24px;
+    box-shadow: 0 10px 30px -10px rgb(234 88 12);
+}
+
+@media (max-width: 640px) {
+    .place-order-card {
+        padding: 20px !important;
+        border-radius: 18px;
+    }
+
+    #cartContainer {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+}

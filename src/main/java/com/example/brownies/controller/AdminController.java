@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Map;
 
 @Controller
@@ -25,11 +24,9 @@ public class AdminController {
     public String dashboard(Model model) {
         List<OrderResponse> orders = orderService.getAllOrders();
 
-        // Pre-calculate counts in Java — Thymeleaf cannot do Java stream().filter() expressions
-        // This was the main crash cause: "response already committed" error
-        long pendingCount    = orders.stream().filter(o -> "PENDING".equals(o.getStatus())).count();
-        long bakingCount     = orders.stream().filter(o -> "IN_PREPARATION".equals(o.getStatus())).count();
-        long deliveredCount  = orders.stream().filter(o -> "DELIVERED".equals(o.getStatus())).count();
+        long pendingCount = orders.stream().filter(o -> "PENDING".equals(o.getStatus())).count();
+        long bakingCount = orders.stream().filter(o -> "IN_PREPARATION".equals(o.getStatus())).count();
+        long deliveredCount = orders.stream().filter(o -> "DELIVERED".equals(o.getStatus())).count();
 
         model.addAttribute("allOrders", orders);
         model.addAttribute("pendingCount", pendingCount);
@@ -38,54 +35,48 @@ public class AdminController {
         model.addAttribute("newOrderCount", orderService.getNewOrderCount());
         model.addAttribute("newOrders", orderService.getNewOrders());
 
-        return "admin/dashboard";
+        return "admin/dashboard";          // ← Fixed
     }
 
-    // FIX: uses forceUpdateOrderStatus (no strict transition rules)
     @PostMapping("/orders/{id}/status")
-    public String updateStatus(
-            @PathVariable Long id,
-            @RequestParam String status,
-            RedirectAttributes redirectAttributes) {
+    public String updateStatus(@PathVariable Long id,
+                               @RequestParam String status,
+                               RedirectAttributes redirectAttributes) {
         try {
             orderService.forceUpdateOrderStatus(id, status);
             redirectAttributes.addFlashAttribute("success", "Order #" + id + " updated to: " + status);
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard";   // ← Fixed
     }
 
     @PostMapping("/orders/{id}/note")
-    public String addNote(
-            @PathVariable Long id,
-            @RequestParam String adminNote,
-            RedirectAttributes redirectAttributes) {
+    public String addNote(@PathVariable Long id,
+                          @RequestParam String adminNote,
+                          RedirectAttributes redirectAttributes) {
         try {
             orderService.addAdminNote(id, adminNote);
             redirectAttributes.addFlashAttribute("success", "Note saved for Order #" + id);
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard";   // ← Fixed
     }
 
-    // NEW: admin edits the customer's special note
     @PostMapping("/orders/{id}/customer-note")
-    public String updateCustomerNote(
-            @PathVariable Long id,
-            @RequestParam String customerNote,
-            RedirectAttributes redirectAttributes) {
+    public String updateCustomerNote(@PathVariable Long id,
+                                     @RequestParam String customerNote,
+                                     RedirectAttributes redirectAttributes) {
         try {
             orderService.updateCustomerNote(id, customerNote);
             redirectAttributes.addFlashAttribute("success", "Customer note updated for Order #" + id);
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard";   // ← Fixed
     }
 
-    // Returns count + list of new orders for notification panel
     @GetMapping("/notifications")
     @ResponseBody
     public Map<String, Object> getNotificationCount() {
@@ -95,7 +86,6 @@ public class AdminController {
         );
     }
 
-    // Mark all notifications as read via AJAX
     @PostMapping("/notifications/mark-read")
     @ResponseBody
     public Map<String, String> markNotificationsRead() {
@@ -117,8 +107,11 @@ public class AdminController {
                 || (status != null && !status.isBlank());
 
         if (id != null) {
-            try { results = List.of(orderService.getOrderById(id)); }
-            catch (RuntimeException e) { results = List.of(); }
+            try {
+                results = List.of(orderService.getOrderById(id));
+            } catch (RuntimeException e) {
+                results = List.of();
+            }
         } else if (date != null) {
             results = orderService.filterOrdersByDate(date);
         } else if (name != null && !name.isBlank()) {
@@ -137,6 +130,7 @@ public class AdminController {
         model.addAttribute("searchName", name);
         model.addAttribute("searchStatus", status);
         model.addAttribute("searched", searched);
-        return "admin/search-orders";
+
+        return "admin/search-orders";   // ← Fixed (if you have this page)
     }
 }

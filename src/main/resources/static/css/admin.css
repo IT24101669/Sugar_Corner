@@ -1,0 +1,25 @@
+.admin-sidebar {
+    background: #fff;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.08);
+}
+
+.admin-card {
+    transition: all 0.3s;
+}
+
+.admin-card:hover {
+    transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+    }
+
+    .admin-sidebar.active {
+        transform: translateX(0);
+    }
+}
