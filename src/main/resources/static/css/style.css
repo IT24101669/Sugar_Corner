@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: 'Inter', system_ui, sans-serif;
+}
+
+body {
+    background: #f8f4f0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem !important;
+    }
+
+    .grid-cols-4 {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+    }
+
+    .text-4xl {
+        font-size: 2rem !important;
+    }
+
+    .sidebar {
+        display: none;
+    }
+}
+
+/* Beautiful Cards */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}

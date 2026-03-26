@@ -1,0 +1,9 @@
+<div th:replace="~{layout/main :: main(content='customer/profile')}">
+    <h1 class="text-4xl font-bold mb-8">My Profile</h1>
+    <div class="max-w-2xl bg-white p-10 rounded-3xl shadow">
+        <!-- Form fields bound to customer object -->
+        <form th:action="@{/profile/update}" method="post">
+            <!-- fullName, email, phone, address etc. -->
+        </form>
+    </div>
+</div>

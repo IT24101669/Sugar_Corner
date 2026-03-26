@@ -1,0 +1,19 @@
+<div th:replace="~{layout/main :: main(content='admin/feedback-inquiries')}">
+    <h1 class="text-4xl font-bold mb-8">Feedback & Inquiries</h1>
+    <div class="grid grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-2xl mb-4">Feedback</h2>
+            <div th:each="fb : ${feedbackList}" class="bg-white p-6 rounded-3xl shadow mb-4">
+                <p th:text="${fb.message}"></p>
+                <button onclick="replyFeedback([[${fb.id}]])" class="mt-4 text-orange-600">Reply</button>
+            </div>
+        </div>
+        <div>
+            <h2 class="text-2xl mb-4">Inquiries</h2>
+            <div th:each="inq : ${inquiryList}" class="bg-white p-6 rounded-3xl shadow mb-4">
+                <p th:text="${inq.inquiryText}"></p>
+                <button onclick="replyInquiry([[${inq.id}]])" class="mt-4 text-orange-600">Reply</button>
+            </div>
+        </div>
+    </div>
+</div>

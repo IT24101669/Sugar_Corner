@@ -1,0 +1,49 @@
+<div th:replace="~{layout/main :: main(content='customer/order-history')}">
+    <h1 class="text-4xl font-bold mb-8">My Order History</h1>
+
+    <table class="w-full bg-white rounded-3xl shadow overflow-hidden">
+        <thead class="bg-gray-100">
+        <tr class="text-left">
+            <th class="p-6">Order ID</th>
+            <th class="p-6">Date</th>
+            <th class="p-6">Status</th>
+            <th class="p-6">Total</th>
+            <th class="p-6">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}" class="border-t">
+            <td class="p-6">
+                #<span th:text="${order.id}"></span>
+            </td>
+            <td class="p-6" th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+            <td class="p-6">
+                    <span th:text="${order.status}"
+                          class="px-4 py-1 text-xs rounded-full bg-orange-100 text-orange-700">
+                    </span>
+            </td>
+            <td class="p-6 font-medium" th:text="${order.totalAmount}"></td>
+            <td class="p-6">
+                <button th:onclick="|reorderOrder('${order.id}')|"
+                        class="text-orange-600 hover:underline font-medium">
+                    Reorder Again
+                </button>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(orders)}">
+            <td colspan="5" class="p-10 text-center text-gray-500">
+                You haven't placed any orders yet.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script th:inline="javascript">
+        function reorderOrder(orderId) {
+            if(confirm('Do you want to add the items from order #' + orderId + ' to your cart?')) {
+                // Your logic here (e.g., window.location.href or a fetch request)
+                console.log("Reordering ID:", orderId);
+            }
+        }
+    </script>
+</div>
