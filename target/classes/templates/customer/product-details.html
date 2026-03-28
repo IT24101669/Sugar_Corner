@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${product != null ? product.name + ' • Sugar Corner' : 'Product • Sugar Corner'}"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .product-main-image {
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        .star {
+            cursor: pointer;
+            font-size: 2.2rem;
+            transition: all 0.2s;
+        }
+        .star:hover { transform: scale(1.15); }
+        .active-star { color: #f59e0b; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/customer/products" class="logo">Sugar<span>Corner</span></a>
+        <div class="menu-toggle" id="menuToggle">☰</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/customer/products">Shop</a></li>
+            <li><a th:href="@{/customer/orders/place}">Place Order</a></li>
+            <li><a th:href="@{/customer/orders/history}">My Orders</a></li>
+            <li><a th:href="@{/customer/profile}">Profile</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="video-background">
+    <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/video_files/preview/mixkit-hot-melted-chocolate-dripping-41527-preview.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="container py-12">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Product Details Card -->
+        <div class="grid md:grid-cols-2 gap-12 bg-white rounded-3xl shadow-2xl p-10" id="productDetail">
+            <div class="text-center">
+                <img id="productImage" class="product-main-image w-full" alt="Product Image">
+            </div>
+            <div>
+                <h1 id="productName" class="text-4xl font-bold mb-4"></h1>
+                <p id="productPrice" class="text-5xl font-bold text-orange-600 mb-6"></p>
+
+                <div class="flex items-center gap-4 mb-8">
+                    <span id="stockStatus" class="font-semibold text-xl"></span>
+                </div>
+
+                <p id="productDescription" class="text-gray-700 leading-relaxed mb-10"></p>
+
+                <button onclick="addToCartFromDetail()"
+                        class="w-full bg-orange-600 hover:bg-orange-700 text-white py-6 rounded-3xl text-xl font-bold transition mb-4">
+                    Add to Cart
+                </button>
+
+                <a th:href="@{/customer/orders/place}"
+                   class="block text-center text-orange-600 font-medium hover:underline">
+                    Go to Place Order →
+                </a>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="mt-16 bg-white rounded-3xl shadow-xl p-10">
+            <h2 class="text-3xl font-bold mb-8">⭐ Customer Reviews</h2>
+            <div id="reviewsContainer" class="space-y-8 mb-12"></div>
+
+            <button onclick="toggleReviewForm()" id="reviewBtn"
+                    class="bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-2xl text-lg font-semibold">
+                Write a Review
+            </button>
+
+            <!-- Review Form -->
+            <form id="reviewForm" class="hidden mt-10 border-t pt-10">
+                <h3 class="text-xl font-semibold mb-6">Share Your Experience</h3>
+
+                <div class="flex gap-1 mb-6" id="starRating">
+                    <span class="star text-gray-300" data-value="1" onclick="setRating(1)">★</span>
+                    <span class="star text-gray-300" data-value="2" onclick="setRating(2)">★</span>
+                    <span class="star text-gray-300" data-value="3" onclick="setRating(3)">★</span>
+                    <span class="star text-gray-300" data-value="4" onclick="setRating(4)">★</span>
+                    <span class="star text-gray-300" data-value="5" onclick="setRating(5)">★</span>
+                </div>
+                <input type="hidden" id="ratingValue" value="0">
+
+                <textarea id="reviewMessage" rows="5"
+                          class="w-full p-6 border border-gray-300 rounded-3xl focus:outline-none focus:border-orange-500"
+                          placeholder="What did you think about this product?"></textarea>
+
+                <button type="button" onclick="submitReview()"
+                        class="mt-8 bg-green-600 hover:bg-green-700 text-white px-12 py-4 rounded-3xl font-semibold">
+                    Submit Review
+                </button>
+            </form>
+        </div>
+
+        <div class="text-center mt-12">
+            <a th:href="@{/customer/products}"
+               class="inline-block bg-gray-800 text-white px-10 py-4 rounded-3xl hover:bg-gray-900">
+                ← Back to Shop
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let productId = window.location.pathname.split('/').pop();
+    let currentRating = 0;
+
+    // Load Product
+    async function loadProduct() {
+        try {
+            const res = await fetch(`/api/products/${productId}`);
+            if (!res.ok) throw new Error();
+            const p = await res.json();
+
+            // Fill product details
+            document.getElementById('productName').textContent = p.name;
+            document.getElementById('productPrice').textContent = `LKR ${p.price.toFixed(2)}`;
+            document.getElementById('productDescription').textContent = p.description || "No description available.";
+            document.getElementById('productImage').src = p.imageUrl || 'https://via.placeholder.com/600x600?text=' + encodeURIComponent(p.name);
+
+            const stockEl = document.getElementById('stockStatus');
+            if (p.available) {
+                stockEl.innerHTML = '✅ In Stock';
+                stockEl.style.color = '#16a34a';
+            } else {
+                stockEl.innerHTML = '❌ Out of Stock';
+                stockEl.style.color = '#dc2626';
+            }
+
+            loadReviews();
+        } catch (err) {
+            document.getElementById('productDetail').innerHTML = `
+            <div class="col-span-2 text-center py-20">
+                <h2 class="text-3xl text-red-500">Product not found or error loading</h2>
+            </div>`;
+        }
+    }
+
+    // Load Reviews
+    async function loadReviews() {
+        try {
+            const res = await fetch('/api/support/feedback/all');
+            const feedbacks = await res.json();
+
+            const filtered = feedbacks.filter(f =>
+                f.message && f.message.includes(`[Product ID: ${productId}]`)
+            );
+
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = filtered.length === 0
+                ? `<p class="text-gray-500 italic text-center py-8">No reviews yet. Be the first!</p>`
+                : filtered.map(f => `
+                <div class="border-l-4 border-orange-500 pl-6 py-2">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold">${f.customerName || 'Anonymous'}</p>
+                        <span class="text-amber-500">${'★'.repeat(f.rating || 0)}</span>
+                    </div>
+                    <p class="mt-3">${f.message.replace(`[Product ID: ${productId}]`, '').trim()}</p>
+                    ${f.adminReply ? `
+                        <div class="mt-4 pl-4 border-l-2 border-gray-300 text-sm">
+                            <span class="text-orange-600 font-medium">Admin Reply:</span><br>
+                            ${f.adminReply}
+                        </div>` : ''}
+                </div>
+            `).join('');
+        } catch(e) {
+            console.error("Reviews load failed");
+        }
+    }
+
+    // Star Rating
+    function setRating(rating) {
+        currentRating = rating;
+        document.getElementById('ratingValue').value = rating;
+        document.querySelectorAll('#starRating span').forEach(s => {
+            s.classList.toggle('active-star', parseInt(s.dataset.value) <= rating);
+        });
+    }
+
+    function toggleReviewForm() {
+        document.getElementById('reviewForm').classList.toggle('hidden');
+    }
+
+    async function submitReview() {
+        const message = document.getElementById('reviewMessage').value.trim();
+        const rating = currentRating;
+
+        if (!message || rating === 0) {
+            alert("Please write something and select rating stars");
+            return;
+        }
+
+        const payload = {
+            customerName: "Customer",
+            email: "customer@sugarcorner.lk",
+            rating: rating,
+            message: `[Product ID: ${productId}] ${message}`,
+            type: "feedback"
+        };
+
+        try {
+            const res = await fetch('/api/support/feedback', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                alert("✅ Thank you for your review!");
+                document.getElementById('reviewForm').classList.add('hidden');
+                document.getElementById('reviewMessage').value = '';
+                currentRating = 0;
+                loadReviews();
+            } else {
+                alert("Failed to submit review");
+            }
+        } catch(err) {
+            alert("Connection error");
+        }
+    }
+
+    function addToCartFromDetail() {
+        alert("✅ Product added to cart!\n\nGo to 'Place Order' page to complete your order.");
+        // ඔයාට cart logic එක එකතු කරන්න පුළුවන්
+    }
+
+    // Mobile Menu Toggle
+    document.getElementById('menuToggle').addEventListener('click', () => {
+        document.getElementById('navLinks').classList.toggle('active');
+    });
+
+    // Initialize Page
+    window.onload = loadProduct;
+</script>
+
+</body>
+</html>

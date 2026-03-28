@@ -1,0 +1,30 @@
+<div th:replace="~{admin.auth/main :: main(content='admin/orders')}">
+  <h1 class="text-4xl font-bold mb-8">All Orders</h1>
+  <div class="bg-white rounded-3xl shadow overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-100">
+      <tr>
+        <th class="p-6 text-left">Order ID</th>
+        <th class="p-6 text-left">Customer</th>
+        <th class="p-6 text-left">Status</th>
+        <th class="p-6 text-right">Total</th>
+        <th class="p-6 text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${allOrders}" class="border-t">
+        <td class="p-6">#<span th:text="${order.id}"></span></td>
+        <td class="p-6" th:text="${order.customerName}"></td>
+        <td class="p-6" th:text="${order.status}"></td>
+        <td class="p-6 text-right font-medium" th:text="${order.totalAmount}"></td>
+        <td class="p-6 text-center">
+          <button onclick="updateOrderStatus([[${order.id}]], 'CONFIRMED')"
+                  class="text-blue-600 hover:underline mx-2">Confirm</button>
+          <button onclick="updateOrderStatus([[${order.id}]], 'DELIVERED')"
+                  class="text-green-600 hover:underline mx-2">Delivered</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

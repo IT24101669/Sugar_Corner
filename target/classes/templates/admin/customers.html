@@ -1,0 +1,43 @@
+<div th:replace="~{admin.auth/main :: main(content='admin/customers')}">
+  <h1 class="text-4xl font-bold mb-8">Registered Customers</h1>
+
+  <div class="bg-white rounded-3xl shadow overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-100">
+      <tr>
+        <th class="p-6 text-left">Customer Name</th>
+        <th class="p-6 text-left">Email</th>
+        <th class="p-6 text-left">Phone</th>
+        <th class="p-6 text-center">Status</th>
+        <th class="p-6 text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="cust : ${customers}" class="border-t">
+        <td class="p-6" th:text="${cust.fullName}"></td>
+        <td class="p-6" th:text="${cust.email}"></td>
+        <td class="p-6" th:text="${cust.phone}"></td>
+        <td class="p-6 text-center">
+          <span th:if="${cust.active}" class="px-4 py-1 bg-green-100 text-green-700 rounded-full text-sm">Active</span>
+          <span th:if="${!cust.active}" class="px-4 py-1 bg-red-100 text-red-700 rounded-full text-sm">Blocked</span>
+        </td>
+        <td class="p-6 text-center">
+          <button th:onclick="|toggleBlock(${cust.id})|"
+                  class="px-5 py-2 rounded-2xl text-sm"
+                  th:classappend="${cust.active} ? 'bg-red-600 text-white' : 'bg-green-600 text-white'">
+            <span th:text="${cust.active} ? 'Block' : 'Unblock'"></span>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  async function toggleBlock(id) {
+    if (!confirm("Are you sure?")) return;
+    await fetch(`/admin/customers/${id}/toggle`, { method: 'POST' });
+    location.reload();
+  }
+</script>
