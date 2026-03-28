@@ -3,8 +3,10 @@ package com.example.brownies.controller;
 import com.example.brownies.dto.OrderItemResponse;
 import com.example.brownies.dto.OrderRequest;
 import com.example.brownies.dto.OrderResponse;
+import com.example.brownies.model.Product;
 import com.example.brownies.model.User;
 import com.example.brownies.service.OrderService;
+import com.example.brownies.service.ProductService;
 import com.example.brownies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,11 +24,12 @@ public class CustomerController {
 
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
 
-    // US-3: Customer Dashboard
+    // ==================== Dashboard ====================
     @GetMapping("/dashboard")
     public String dashboard(Authentication auth, Model model) {
         User customer = getLoggedInUser(auth);
@@ -36,7 +39,32 @@ public class CustomerController {
         return "customer/dashboard";
     }
 
-    // US-1: Full order history
+    // ==================== Products ====================
+    @GetMapping("/products")
+    public String productsPage(Authentication auth, Model model) {
+        User customer = getLoggedInUser(auth);
+        model.addAttribute("customer", customer);
+        return "customer/products";
+    }
+
+    // ==================== Product Details (නිවැරදි එකම method එක) ====================
+    @GetMapping("/product/{id}")
+    public String productDetails(@PathVariable Long id, Model model, Authentication auth) {
+        try {
+            Product product = productService.getProductById(id);
+            User customer = getLoggedInUser(auth);
+
+            model.addAttribute("product", product);
+            model.addAttribute("customer", customer);
+
+            return "customer/product-details";
+        } catch (Exception e) {
+            model.addAttribute("error", "Product not found: " + e.getMessage());
+            return "customer/product-details";
+        }
+    }
+
+    // ==================== Orders ====================
     @GetMapping("/orders/history")
     public String orderHistory(Authentication auth, Model model) {
         User customer = getLoggedInUser(auth);
@@ -45,25 +73,20 @@ public class CustomerController {
         return "customer/order-history";
     }
 
-    // US-2: Show place-order form
-    // Also handles reorder: checks session for pre-loaded cart items
     @GetMapping("/orders/place")
     public String placeOrderPage(Authentication auth, Model model, HttpSession session) {
         User customer = getLoggedInUser(auth);
         model.addAttribute("customer", customer);
 
-        // Check if a reorder was triggered — items stored in session
-        List<OrderItemResponse> reorderItems =
-                (List<OrderItemResponse>) session.getAttribute("reorderItems");
+        List<OrderItemResponse> reorderItems = (List<OrderItemResponse>) session.getAttribute("reorderItems");
         if (reorderItems != null) {
             model.addAttribute("reorderItems", reorderItems);
-            session.removeAttribute("reorderItems"); // consume it — only used once
+            session.removeAttribute("reorderItems");
         }
 
         return "customer/place-order";
     }
 
-    // US-2: Submit new order (AJAX)
     @PostMapping("/orders/place")
     @ResponseBody
     public OrderResponse placeOrder(@RequestBody OrderRequest request, Authentication auth) {
@@ -71,16 +94,12 @@ public class CustomerController {
         return orderService.placeOrder(customer, request);
     }
 
-    // NEW US-10: Reorder — copies items from a previous order into the session
-    // then redirects to the place-order page which reads from the session
-    // POST /customer/orders/{id}/reorder
     @PostMapping("/orders/{id}/reorder")
     public String reorder(@PathVariable Long id, Authentication auth,
                           HttpSession session, RedirectAttributes redirectAttributes) {
         User customer = getLoggedInUser(auth);
         try {
             OrderResponse original = orderService.getOrderById(id);
-            // Safety: ensure the order belongs to this customer
             if (!original.getCustomerEmail().equals(customer.getEmail())) {
                 redirectAttributes.addFlashAttribute("error", "You cannot reorder this order.");
                 return "redirect:/customer/orders/history";
@@ -89,20 +108,16 @@ public class CustomerController {
                 redirectAttributes.addFlashAttribute("error", "This order has no items to reorder.");
                 return "redirect:/customer/orders/history";
             }
-            // Store items in session — place-order page will read and consume them
             session.setAttribute("reorderItems", original.getItems());
-            redirectAttributes.addFlashAttribute("reorderSuccess",
-                    "Cart pre-filled with items from Order #" + id + ". Review and confirm below.");
+            redirectAttributes.addFlashAttribute("reorderSuccess", "Cart pre-filled with items from Order #" + id);
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", "Could not load order: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/customer/orders/place";
     }
 
-    // US-7: Cancel an order
     @PostMapping("/orders/{id}/cancel")
-    public String cancelOrder(@PathVariable Long id, Authentication auth,
-                              RedirectAttributes redirectAttributes) {
+    public String cancelOrder(@PathVariable Long id, Authentication auth, RedirectAttributes redirectAttributes) {
         User customer = getLoggedInUser(auth);
         try {
             orderService.cancelOrder(id, customer);
@@ -111,6 +126,29 @@ public class CustomerController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/customer/dashboard";
+    }
+
+    // ==================== Profile ====================
+    @GetMapping("/profile")
+    public String profilePage(Authentication auth, Model model) {
+        User customer = getLoggedInUser(auth);
+        model.addAttribute("customer", customer);
+        return "customer/profile";
+    }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute User updatedUser, Authentication auth, RedirectAttributes redirectAttributes) {
+        try {
+            User currentUser = getLoggedInUser(auth);
+            currentUser.setFullName(updatedUser.getFullName());
+            currentUser.setPhone(updatedUser.getPhone());
+            currentUser.setAddress(updatedUser.getAddress());
+            userService.updateUser(currentUser);
+            redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to update profile.");
+        }
+        return "redirect:/customer/profile";
     }
 
     private User getLoggedInUser(Authentication auth) {

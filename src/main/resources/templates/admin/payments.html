@@ -1,0 +1,48 @@
+<div th:replace="~{admin.auth/main :: main(content='admin/payments')}">
+  <h1 class="text-4xl font-bold mb-8">Payments Management</h1>
+
+  <div class="bg-white rounded-3xl shadow p-8">
+    <table class="w-full">
+      <thead class="bg-gray-100">
+      <tr>
+        <th class="p-6">Order ID</th>
+        <th class="p-6">Customer</th>
+        <th class="p-6">Method</th>
+        <th class="p-6">Amount</th>
+        <th class="p-6">Status</th>
+        <th class="p-6 text-center">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="pay : ${payments}" class="border-t">
+        <td class="p-6">#<span th:text="${pay.orderId}"></span></td>
+        <td class="p-6" th:text="${pay.customerName}"></td>
+        <td class="p-6" th:text="${pay.method}"></td>
+        <td class="p-6 font-semibold" th:text="${pay.amount}"></td>
+        <td class="p-6">
+            <span th:text="${pay.status}"
+                  class="px-4 py-1 rounded-full text-sm"
+                  th:classappend="${pay.status == 'PAID'} ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'">
+            </span>
+        </td>
+        <td class="p-6 text-center">
+          <button th:if="${pay.status != 'PAID'}"
+                  th:onclick="|markAsPaid(${pay.id})|"
+                  class="bg-green-600 text-white px-6 py-2 rounded-2xl text-sm">
+            Mark as Paid
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  async function markAsPaid(paymentId) {
+    if (confirm("Mark this payment as PAID?")) {
+      await fetch(`/api/payments/process/${paymentId}`, { method: 'POST' });
+      location.reload();
+    }
+  }
+</script>

@@ -35,7 +35,7 @@ public class AdminController {
         model.addAttribute("newOrderCount", orderService.getNewOrderCount());
         model.addAttribute("newOrders", orderService.getNewOrders());
 
-        return "admin/dashboard";          // ← Fixed
+        return "admin/dashboard";
     }
 
     @PostMapping("/orders/{id}/status")
@@ -48,7 +48,7 @@ public class AdminController {
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/admin/dashboard";   // ← Fixed
+        return "redirect:/admin/dashboard";
     }
 
     @PostMapping("/orders/{id}/note")
@@ -61,7 +61,7 @@ public class AdminController {
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/admin/dashboard";   // ← Fixed
+        return "redirect:/admin/dashboard";
     }
 
     @PostMapping("/orders/{id}/customer-note")
@@ -74,7 +74,7 @@ public class AdminController {
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/admin/dashboard";   // ← Fixed
+        return "redirect:/admin/dashboard";
     }
 
     @GetMapping("/notifications")
@@ -93,44 +93,17 @@ public class AdminController {
         return Map.of("status", "ok");
     }
 
-    @GetMapping("/orders/search")
-    public String searchOrders(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(required = false) Long id,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String status,
-            Model model) {
+    @GetMapping("/feedback-inquiries")
+    public String feedbackInquiries(Model model) {
+        // ඔයාට අවශ්‍ය නම් SupportController එකෙන් data ගන්න
+        model.addAttribute("feedbackList", List.of());
+        model.addAttribute("inquiryList", List.of());
+        return "admin/feedback-inquiries";
+    }
 
-        List<OrderResponse> results;
-        boolean searched = id != null || date != null
-                || (name != null && !name.isBlank())
-                || (status != null && !status.isBlank());
-
-        if (id != null) {
-            try {
-                results = List.of(orderService.getOrderById(id));
-            } catch (RuntimeException e) {
-                results = List.of();
-            }
-        } else if (date != null) {
-            results = orderService.filterOrdersByDate(date);
-        } else if (name != null && !name.isBlank()) {
-            results = orderService.searchByCustomerName(name);
-        } else if (status != null && !status.isBlank()) {
-            results = orderService.getAllOrders().stream()
-                    .filter(o -> status.equals(o.getStatus()))
-                    .collect(java.util.stream.Collectors.toList());
-        } else {
-            results = List.of();
-        }
-
-        model.addAttribute("orders", results);
-        model.addAttribute("searchDate", date);
-        model.addAttribute("searchId", id);
-        model.addAttribute("searchName", name);
-        model.addAttribute("searchStatus", status);
-        model.addAttribute("searched", searched);
-
-        return "admin/search-orders";   // ← Fixed (if you have this page)
+    @GetMapping("/orders")
+    public String ordersPage(Model model) {
+        model.addAttribute("allOrders", orderService.getAllOrders());
+        return "admin/orders";
     }
 }

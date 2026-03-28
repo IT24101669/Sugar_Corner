@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:title="|Brownies Shop - ${title}|">Brownies Shop</title>
+    <title th:text="${title} != null ? |Brownies Shop - ${title}| : 'Brownies Shop'"></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/customer.css}" th:if="${#httpSession.getAttribute('role') == 'CUSTOMER'}">
@@ -15,10 +15,9 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="flex">
-    <!-- Sidebar (Admin only) -->
+    <!-- Admin Sidebar -->
     <div th:if="${#httpSession.getAttribute('role') == 'ADMIN'}" class="w-64 bg-white shadow-lg min-h-screen">
-        <!-- Admin sidebar links here -->
-        <div th:replace="~{admin/sidebar :: sidebar}"></div>
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     </div>
 
     <!-- Main Content -->
@@ -26,7 +25,6 @@
         <div th:insert="${content}"></div>
     </div>
 </div>
-
 
 <script th:src="@{/js/common.js}"></script>
 <script th:if="${#httpSession.getAttribute('role') == 'CUSTOMER'}" th:src="@{/js/customer.js}"></script>

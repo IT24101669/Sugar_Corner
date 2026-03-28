@@ -1,14 +1,11 @@
 package com.example.brownies.model;
 
-// File: src/main/java/com/example/brownies/model/Order.java
-// Updated to resolve duplicate entity name conflict
-
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity(name = "OrderModel") // මෙතන Entity නම "OrderModel" ලෙස වෙනස් කළා
+@Entity
 @Table(name = "orders")
 public class Order {
 
@@ -47,8 +44,6 @@ public class Order {
     @Column(nullable = false)
     private boolean notified = false;
 
-    // mappedBy එකේ "order" යන්න නිවැරදි දැයි බලන්න.
-    // OrderItem class එකේ field එකේ නම මෙතනට දිය යුතුය.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
@@ -65,7 +60,8 @@ public class Order {
 
     public Order() {}
 
-    // Getters and Setters
+    // ==================== Getters & Setters ====================
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

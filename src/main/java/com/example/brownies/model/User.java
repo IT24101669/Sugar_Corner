@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity(name = "UserModel") // මෙතන Entity නම "UserModel" ලෙස වෙනස් කළා
+@Entity
 @Table(name = "users")
 public class User {
 

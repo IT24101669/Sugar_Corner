@@ -1,13 +1,5 @@
 package com.example.brownies.config;
 
-// ==========================================
-// File: src/main/java/com/example/brownies/config/SecurityConfig.java
-// Purpose: Spring Security configuration
-//          PasswordEncoder bean moved to PasswordConfig.java to fix circular dependency:
-//          SecurityConfig -> UserService -> PasswordEncoder -> SecurityConfig (CYCLE)
-//          Fix: PasswordEncoder now lives in its own PasswordConfig class
-// ==========================================
-
 import com.example.brownies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +17,12 @@ public class SecurityConfig {
     @Autowired
     private UserService userService;
 
-    // PasswordEncoder is injected from PasswordConfig — NOT defined here
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * Authentication provider using our UserService + BCrypt encoder.
-     */
+    @Autowired
+    private CustomAuthenticationSuccessHandler successHandler;   // ← Custom Handler එක එකතු කළා
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -40,22 +31,23 @@ public class SecurityConfig {
         return provider;
     }
 
-    /**
-     * Security filter chain — defines URL access rules, login/logout pages.
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/home", "/index", "/static/**", "/css/**", "/js/**", "/images/**",
+                                "/uploads/images/**", "/api/**", "/login", "/register").permitAll()
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .successHandler(successHandler)           // ← Custom Success Handler භාවිතා කරනවා
+                        // .defaultSuccessUrl("/dashboard", true)   // මේක comment කළා (conflict නොවීමට)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -65,6 +57,9 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf.disable());
+
+        // Authentication Provider එක සම්බන්ධ කරන්න
+        http.authenticationProvider(authenticationProvider());
 
         return http.build();
     }
