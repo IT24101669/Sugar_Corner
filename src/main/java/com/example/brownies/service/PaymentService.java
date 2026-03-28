@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -49,5 +50,13 @@ public class PaymentService {
 
     public Payment findById(Long id) {
         return paymentRepository.findById(id).orElse(null);
+    }
+
+    // ==================== NEW METHOD ====================
+    /**
+     * Admin Payments page සඳහා සියලුම payments ලබා ගැනීමට
+     */
+    public List<Payment> getAllPayments() {
+        return paymentRepository.findAll();
     }
 }

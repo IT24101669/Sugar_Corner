@@ -42,24 +42,30 @@ public class CustomerController {
     // ==================== Products ====================
     @GetMapping("/products")
     public String productsPage(Authentication auth, Model model) {
-        User customer = getLoggedInUser(auth);
-        model.addAttribute("customer", customer);
-        return "customer/products";
+        if (auth == null || auth.getName() == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            User customer = getLoggedInUser(auth);
+            model.addAttribute("customer", customer);
+            return "customer/products";
+        } catch (Exception e) {
+            // Log කරන්න පුළුවන් නම් කරන්න
+            return "redirect:/login?error=true";
+        }
     }
 
-    // ==================== Product Details (නිවැරදි එකම method එක) ====================
     @GetMapping("/product/{id}")
     public String productDetails(@PathVariable Long id, Model model, Authentication auth) {
         try {
             Product product = productService.getProductById(id);
             User customer = getLoggedInUser(auth);
-
             model.addAttribute("product", product);
             model.addAttribute("customer", customer);
-
             return "customer/product-details";
         } catch (Exception e) {
-            model.addAttribute("error", "Product not found: " + e.getMessage());
+            model.addAttribute("error", "Product not found");
             return "customer/product-details";
         }
     }
@@ -83,7 +89,6 @@ public class CustomerController {
             model.addAttribute("reorderItems", reorderItems);
             session.removeAttribute("reorderItems");
         }
-
         return "customer/place-order";
     }
 
@@ -105,11 +110,11 @@ public class CustomerController {
                 return "redirect:/customer/orders/history";
             }
             if (original.getItems() == null || original.getItems().isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "This order has no items to reorder.");
+                redirectAttributes.addFlashAttribute("error", "This order has no items.");
                 return "redirect:/customer/orders/history";
             }
             session.setAttribute("reorderItems", original.getItems());
-            redirectAttributes.addFlashAttribute("reorderSuccess", "Cart pre-filled with items from Order #" + id);
+            redirectAttributes.addFlashAttribute("success", "Cart pre-filled with Order #" + id);
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -121,7 +126,7 @@ public class CustomerController {
         User customer = getLoggedInUser(auth);
         try {
             orderService.cancelOrder(id, customer);
-            redirectAttributes.addFlashAttribute("success", "Order #" + id + " has been cancelled.");
+            redirectAttributes.addFlashAttribute("success", "Order #" + id + " cancelled.");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -149,6 +154,14 @@ public class CustomerController {
             redirectAttributes.addFlashAttribute("error", "Failed to update profile.");
         }
         return "redirect:/customer/profile";
+    }
+
+    // ==================== Support / Feedback ====================
+    @GetMapping("/feedback")
+    public String feedbackPage(Authentication auth, Model model) {
+        User customer = getLoggedInUser(auth);
+        model.addAttribute("customer", customer);
+        return "customer/feedback";
     }
 
     private User getLoggedInUser(Authentication auth) {

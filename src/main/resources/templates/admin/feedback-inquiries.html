@@ -1,91 +1,20 @@
-<div th:replace="~{admin.auth/main :: main(content='admin/feedback-inquiries')}">
-
+<div th:replace="~{fragments/main :: main(content='admin/feedback-inquiries')}">
   <h1 class="text-4xl font-bold mb-8">Feedback & Inquiries</h1>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
-    <!-- Feedback Section -->
     <div>
-      <h2 class="text-2xl font-semibold mb-6 flex items-center gap-3">
-        📝 Customer Feedback
-      </h2>
-      <div id="feedbackList" class="space-y-6">
-        <!-- JS මගින් load වෙනවා -->
-      </div>
+      <h2 class="text-2xl font-semibold mb-6">📝 Customer Feedback</h2>
+      <div id="feedbackList" class="space-y-6"></div>
     </div>
-
-    <!-- Inquiries Section -->
     <div>
-      <h2 class="text-2xl font-semibold mb-6 flex items-center gap-3">
-        💬 Live Inquiries
-      </h2>
-      <div id="inquiryList" class="space-y-6">
-        <!-- JS මගින් load වෙනවා -->
-      </div>
+      <h2 class="text-2xl font-semibold mb-6">💬 Live Inquiries</h2>
+      <div id="inquiryList" class="space-y-6"></div>
     </div>
   </div>
 </div>
 
 <script>
   const API_BASE = "/api/support";
-
-  async function loadFeedback() {
-    const res = await fetch(`${API_BASE}/feedback/all`);
-    const data = await res.json();
-
-    const container = document.getElementById('feedbackList');
-    container.innerHTML = data.map(f => `
-        <div class="bg-white p-6 rounded-3xl shadow">
-            <p class="text-gray-700">"${f.message}"</p>
-            <div class="mt-4 flex justify-between items-center text-sm">
-                <div>
-                    <span class="font-medium">${f.customerName || 'Anonymous'}</span>
-                    ${f.rating ? `<span class="ml-3 text-amber-500">★${f.rating}</span>` : ''}
-                </div>
-                <button onclick="replyToFeedback(${f.id})"
-                        class="text-orange-600 hover:underline font-medium">
-                    Reply
-                </button>
-            </div>
-        </div>
-    `).join('');
-  }
-
-  async function loadInquiries() {
-    const res = await fetch(`${API_BASE}/inquiry/all`);
-    const data = await res.json();
-
-    const container = document.getElementById('inquiryList');
-    container.innerHTML = data.map(i => `
-        <div class="bg-white p-6 rounded-3xl shadow">
-            <p class="text-gray-700">"${i.inquiryText}"</p>
-            <div class="mt-4 flex justify-between items-center text-sm">
-                <span class="font-medium">${i.email}</span>
-                <a href="/admin-chat.html?id=${i.id}" target="_blank"
-                   class="bg-blue-600 text-white px-5 py-2 rounded-2xl text-sm font-medium hover:bg-blue-700">
-                    Open Chat
-                </a>
-            </div>
-        </div>
-    `).join('');
-  }
-
-  async function replyToFeedback(id) {
-    const reply = prompt("Enter your reply:");
-    if (!reply) return;
-
-    await fetch(`${API_BASE}/feedback/${id}/reply`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({reply: reply})
-    });
-    alert("Reply sent!");
-    loadFeedback();
-  }
-
-  // Load both when page opens
-  window.onload = () => {
-    loadFeedback();
-    loadInquiries();
-  };
+  // ඔයාගේ පැරණි loadFeedback, loadInquiries, replyToFeedback functions තියාගන්න
+  window.onload = () => { loadFeedback(); loadInquiries(); };
 </script>

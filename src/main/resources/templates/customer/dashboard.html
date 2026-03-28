@@ -1,21 +1,20 @@
-<h1 class="text-4xl font-bold mb-8">
-  Welcome back, <span th:text="${customer.fullName}" class="text-orange-600"></span> 👋
-</h1>
+<div th:replace="~{fragments/main :: main(content='customer/dashboard')}">
+  <h1 class="text-4xl font-bold mb-8">
+    Welcome back, <span th:text="${customer.fullName}" class="text-orange-600"></span> 👋
+  </h1>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <div class="bg-white p-8 rounded-3xl shadow text-center">
-    <p class="text-orange-600 text-sm">Active Orders</p>
-    <p class="text-6xl font-bold text-orange-500 mt-3"
-       th:text="${activeOrders != null ? activeOrders.size() : 0}"></p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-8 rounded-3xl shadow text-center">
+      <p class="text-orange-600 text-sm">Active Orders</p>
+      <p class="text-6xl font-bold text-orange-500 mt-3" th:text="${activeOrders != null ? activeOrders.size() : 0}"></p>
+    </div>
+
+    <a th:href="@{/customer/orders/place}" class="bg-orange-500 hover:bg-orange-600 text-white p-8 rounded-3xl shadow text-center text-2xl font-medium flex items-center justify-center">
+      Place New Order
+    </a>
+
+    <a th:href="@{/customer/orders/history}" class="bg-white hover:bg-gray-50 border border-orange-200 p-8 rounded-3xl shadow text-center text-2xl font-medium flex items-center justify-center">
+      View Order History
+    </a>
   </div>
-
-  <a th:href="@{/customer/orders/place}"
-     class="bg-orange-500 hover:bg-orange-600 text-white p-8 rounded-3xl shadow text-center text-2xl font-medium flex items-center justify-center">
-    Place New Order
-  </a>
-
-  <a th:href="@{/customer/orders/history}"
-     class="bg-white hover:bg-gray-50 border border-orange-200 p-8 rounded-3xl shadow text-center text-2xl font-medium flex items-center justify-center">
-    View Order History
-  </a>
 </div>

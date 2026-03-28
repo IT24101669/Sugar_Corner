@@ -1,4 +1,4 @@
-<div th:replace="~{admin.auth/main :: main(content='admin/payments')}">
+<div th:replace="~{fragments/main :: main(content='admin/payments')}">
   <h1 class="text-4xl font-bold mb-8">Payments Management</h1>
 
   <div class="bg-white rounded-3xl shadow p-8">
@@ -20,10 +20,10 @@
         <td class="p-6" th:text="${pay.method}"></td>
         <td class="p-6 font-semibold" th:text="${pay.amount}"></td>
         <td class="p-6">
-            <span th:text="${pay.status}"
-                  class="px-4 py-1 rounded-full text-sm"
-                  th:classappend="${pay.status == 'PAID'} ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'">
-            </span>
+                    <span th:text="${pay.status}"
+                          class="px-4 py-1 rounded-full text-sm"
+                          th:classappend="${pay.status == 'PAID'} ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'">
+                    </span>
         </td>
         <td class="p-6 text-center">
           <button th:if="${pay.status != 'PAID'}"

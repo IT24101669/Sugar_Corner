@@ -1,85 +1,20 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sugar Corner • Premium Brownies & Treats</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
+<div th:replace="~{fragments/main :: main(content='customer/products')}">
+  <h1 class="text-4xl font-bold mb-8 text-gray-800">Our Delicious Brownies</h1>
 
-<!-- Navbar (Customer ගෙ පැත්තට ගැලපෙන) -->
-<nav class="navbar">
-  <div class="navbar-container">
-    <a href="/customer/dashboard" class="logo">Sugar<span>Corner</span></a>
-    <div class="menu-toggle" id="menuToggle">☰</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="/customer/products" class="active">Shop</a></li>
-      <li><a th:href="@{/customer/orders/place}">Place Order</a></li>
-      <li><a th:href="@{/customer/orders/history}">My Orders</a></li>
-      <li><a th:href="@{/customer/profile}">Profile</a></li>
-      <li><a th:href="@{/logout}">Logout</a></li>
-    </ul>
-  </div>
-</nav>
-
-<div class="video-background">
-  <video autoplay muted loop playsinline>
-    <source src="https://assets.mixkit.co/video_files/preview/mixkit-hot-melted-chocolate-dripping-41527-preview.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
-
-<div class="content">
-  <h1>Welcome to Sugar Corner</h1>
-  <p>Premium Homemade Brownies - Crafted with Love</p>
-</div>
-
-<div class="container">
-  <h2>Browse Our Treats</h2>
-
-  <div class="filter-bar">
-    <input type="text" id="searchInput" placeholder="Search for brownies, cookies..." />
-    <button onclick="searchProducts()" class="btn btn-primary">Search</button>
-
-    <input type="text" id="categoryFilter" placeholder="Category" style="width: 140px;"/>
-    <input type="number" id="minPrice" placeholder="Min Price" step="0.01" style="width: 110px;"/>
-    <input type="number" id="maxPrice" placeholder="Max Price" step="0.01" style="width: 110px;"/>
-    <button onclick="filterProducts()" class="btn btn-primary">Filter</button>
-    <button onclick="location.reload()" class="btn btn-secondary">Clear All</button>
+  <div class="mb-8 flex flex-wrap gap-4">
+    <input type="text" id="searchInput" placeholder="Search brownies..."
+           class="flex-1 px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-orange-500">
+    <button onclick="searchProducts()" class="bg-orange-600 text-white px-8 py-3 rounded-2xl font-medium">Search</button>
   </div>
 
-  <div id="productContainer" class="product-grid">
-    <!-- JavaScript මගින් load වෙනවා -->
+  <div id="productContainer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- JS loads products -->
   </div>
 
-  <h2>Featured Treats</h2>
-  <div id="featuredContainer" class="product-grid">
-    <!-- JavaScript මගින් load වෙනවා -->
+  <h2 class="text-3xl font-bold mt-16 mb-8">Featured Treats</h2>
+  <div id="featuredContainer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- JS loads featured -->
   </div>
 </div>
 
 <script th:src="@{/js/products.js}"></script>
-<script>
-  // Mobile menu toggle
-  document.getElementById('menuToggle').addEventListener('click', () => {
-    document.getElementById('navLinks').classList.toggle('active');
-  });
-
-  // Global cart array (තාවකාලිකව)
-  let cart = [];
-
-  function addToCart(id, name, price) {
-    cart.push({ id, name, price, quantity: 1 });
-    alert(`✅ ${name} added to your cart!`);
-    console.log("Current Cart:", cart);
-  }
-
-  function viewProductDetails(id) {
-    window.location.href = `/customer/product/${id}`;
-  }
-</script>
-
-</body>
-</html>

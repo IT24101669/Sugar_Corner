@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${title} != null ? |Sugar Corner - ${title}| : 'Sugar Corner'"></title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/customer.css}" th:if="${#httpSession.getAttribute('role') == 'CUSTOMER'}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}" th:if="${#httpSession.getAttribute('role') == 'ADMIN'}">
+</head>
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="flex">
+
+  <!-- ADMIN SIDEBAR -->
+  <div th:if="${#httpSession.getAttribute('role') == 'ADMIN'}"
+       class="w-64 bg-white shadow-xl min-h-screen hidden lg:block">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 p-6 lg:p-10">
+    <div th:insert="${content}"></div>
+  </div>
+</div>
+
+<script th:src="@{/js/common.js}"></script>
+<script th:if="${#httpSession.getAttribute('role') == 'CUSTOMER'}" th:src="@{/js/customer.js}"></script>
+<script th:if="${#httpSession.getAttribute('role') == 'ADMIN'}" th:src="@{/js/admin.js}"></script>
+
+</body>
+</html>
