@@ -1,18 +1,157 @@
-<div th:replace="~{fragments/main :: main(content='customer/product-details')}">
-    <div class="max-w-6xl mx-auto py-8">
-        <div class="grid md:grid-cols-2 gap-12 bg-white rounded-3xl shadow-2xl overflow-hidden" id="productDetail">
-            <!-- JS will load the product -->
-        </div>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product != null} ? |${product.name} - Sugar Corner| : 'Product Detail'"></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
 
-        <!-- Reviews Section -->
-        <div class="mt-16 bg-white rounded-3xl shadow-xl p-10">
-            <h2 class="text-3xl font-bold mb-8">Customer Reviews</h2>
-            <div id="reviewsContainer" class="space-y-8"></div>
-        </div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="max-w-6xl mx-auto py-10 px-6">
+    <div id="productDetail" class="grid md:grid-cols-2 gap-12 bg-white rounded-3xl shadow-2xl overflow-hidden min-h-[500px]">
+        <!-- JS load කරනවා -->
+    </div>
+
+    <div class="mt-12 bg-white rounded-3xl shadow-xl p-10">
+        <h2 class="text-3xl font-bold mb-6">Description</h2>
+        <div id="productDescription" class="text-gray-600 text-lg leading-relaxed"></div>
     </div>
 </div>
 
+<script th:src="@{/js/common.js}"></script>
 <script>
-    // ඔයාගේ පැරණි product-details script එකම තියාගන්න
+    function getProductId() {
+        const match = window.location.pathname.match(/\/product\/(\d+)/);
+        return match ? parseInt(match[1]) : null;
+    }
+
+    async function loadProduct() {
+        const id = getProductId();
+        if (!id) return;
+
+        try {
+            const res = await fetch(`/api/products/${id}`);
+            if (!res.ok) throw new Error();
+
+            const p = await res.json();
+            const inStock = p.available && (p.quantity || 0) > 0;
+
+            const html = `
+                    <div class="relative">
+                        <img src="${p.imageUrl || '/images/default-brownie.jpg'}" alt="${p.name}"
+                             class="w-full h-full object-cover">
+                        ${!inStock ? `<div class="absolute top-6 right-6 bg-red-600 text-white px-6 py-2 rounded-2xl font-bold text-sm">OUT OF STOCK</div>` : ''}
+                    </div>
+
+                    <div class="p-10 flex flex-col">
+                        <h1 class="text-4xl font-bold mb-3">${p.name}</h1>
+                        <p class="text-5xl font-bold text-orange-600 mb-6">LKR ${p.price.toFixed(2)}</p>
+
+                        <div class="mb-8">
+                            <span class="${inStock ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-5 py-2 rounded-full text-sm font-medium">
+                                ${inStock ? `In Stock (${p.quantity || 0})` : 'Out of Stock'}
+                            </span>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium mb-2">Quantity</label>
+                            <div class="flex items-center gap-4">
+                                <button onclick="changeQty(-1)" class="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-2xl text-3xl font-bold">-</button>
+                                <input id="qty" type="number" value="1" min="1"
+                                       class="w-20 text-center text-2xl border border-gray-300 rounded-2xl py-3 focus:outline-none">
+                                <button onclick="changeQty(1)" class="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-2xl text-3xl font-bold">+</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-10">
+                            <label class="block text-sm font-medium mb-2">Special Requests (Optional)</label>
+                            <textarea id="customNote" rows="3" class="w-full p-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-orange-500"
+                                      placeholder="Less sugar, extra nuts, write name on box..."></textarea>
+                        </div>
+
+                        <button onclick="addCurrentToCart()"
+                                class="w-full ${inStock ? 'bg-orange-600 hover:bg-orange-700' : 'bg-gray-400 cursor-not-allowed'}
+                                       text-white py-6 rounded-3xl text-xl font-bold transition"
+                                ${!inStock ? 'disabled' : ''}>
+                            ${inStock ? 'Add to Cart' : 'Out of Stock'}
+                        </button>
+
+                        <button onclick="history.back()"
+                                class="mt-4 w-full bg-gray-100 hover:bg-gray-200 py-6 rounded-3xl text-xl font-medium">
+                            ← Back to Shop
+                        </button>
+                    </div>
+                `;
+
+            document.getElementById("productDetail").innerHTML = html;
+            document.getElementById("productDescription").innerHTML = p.description || "No description available.";
+
+        } catch (e) {
+            document.getElementById("productDetail").innerHTML = `
+                    <div class="col-span-2 text-center py-20 text-red-500">
+                        <p class="text-2xl">Product not found</p>
+                    </div>`;
+        }
+    }
+
+    let currentQty = 1;
+    function changeQty(n) {
+        currentQty = Math.max(1, currentQty + n);
+        const el = document.getElementById("qty");
+        if (el) el.value = currentQty;
+    }
+
+    function addCurrentToCart() {
+        const id = getProductId();
+        if (!id) return;
+
+        const qty = parseInt(document.getElementById("qty").value) || 1;
+        const note = document.getElementById("customNote").value.trim();
+
+        fetch(`/api/products/${id}`)
+            .then(res => res.json())
+            .then(product => {
+                addToCart(product.id, product.name, product.price, qty, note);
+            })
+            .catch(() => showToast("Failed to add to cart", "error"));
+    }
+
+    // Global addToCart function (common.js සමග compatible)
+    function addToCart(id, name, price, quantity = 1, customization = "") {
+        let cart = JSON.parse(localStorage.getItem('sugarCart') || '[]');
+
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+            existing.quantity += quantity;
+        } else {
+            cart.push({ id, name, price, quantity, customization });
+        }
+
+        localStorage.setItem('sugarCart', JSON.stringify(cart));
+        showToast(`${quantity} × ${name} added to cart!`, 'success');
+        updateCartCount();
+    }
+
+    function showToast(msg, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-6 right-6 px-6 py-4 rounded-2xl text-white shadow-2xl z-50 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function updateCartCount() {
+        const el = document.getElementById('cartCount');
+        if (el) {
+            const cart = JSON.parse(localStorage.getItem('sugarCart') || '[]');
+            el.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+    }
+
     window.onload = loadProduct;
 </script>
+</body>
+</html>

@@ -21,7 +21,7 @@ public class SecurityConfig {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private CustomAuthenticationSuccessHandler successHandler;   // ← Custom Handler එක එකතු කළා
+    private CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -35,19 +35,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/index", "/static/**", "/css/**", "/js/**", "/images/**",
-                                "/uploads/images/**", "/api/**", "/login", "/register").permitAll()
-
+                        .requestMatchers("/", "/home", "/index", "/login", "/register",
+                                "/css/**", "/js/**", "/images/**", "/static/**", "/uploads/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
-
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .successHandler(successHandler)           // ← Custom Success Handler භාවිතා කරනවා
-                        // .defaultSuccessUrl("/dashboard", true)   // මේක comment කළා (conflict නොවීමට)
+                        .successHandler(successHandler)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -58,7 +55,7 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf.disable());
 
-        // Authentication Provider එක සම්බන්ධ කරන්න
+        // මෙතන තියෙනවා ඉතාම වැදගත්
         http.authenticationProvider(authenticationProvider());
 
         return http.build();

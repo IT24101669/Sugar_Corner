@@ -3,74 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Sugar Corner</title>
+  <title>Dashboard - Sugar Corner Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" th:href="@{/css/admin.css}">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
-<body class="bg-gray-100">
+<body>
+<div th:replace="~{fragments/admin-layout :: admin-layout(content='admin/dashboard-content')}">
 
-<nav class="bg-amber-800 text-white p-4 shadow-lg">
-  <div class="max-w-7xl mx-auto flex justify-between items-center">
-    <h1 class="text-2xl font-bold">🍪 Sugar Corner Admin</h1>
-    <div class="flex gap-6">
-      <a href="/admin/products" class="hover:text-amber-200">Products</a>
-      <a href="/admin/support" class="hover:text-amber-200 font-semibold">Support (Feedback & Inquiries)</a>
-      <a th:href="@{/logout}" class="hover:text-amber-200">Logout</a>
-    </div>
-  </div>
-</nav>
+  <h1 class="text-4xl font-bold mb-8">Admin Dashboard</h1>
 
-<div class="max-w-7xl mx-auto p-6">
-  <h2 class="text-3xl font-bold mb-8">Admin Dashboard</h2>
-
-  <!-- Quick Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-    <div class="bg-white p-6 rounded-2xl shadow">
-      <p class="text-gray-500">Total Products</p>
-      <p id="totalProducts" class="text-4xl font-bold text-amber-600">0</p>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+    <div class="bg-white p-8 rounded-3xl shadow">
+      <p class="text-gray-500">Pending</p>
+      <p class="text-5xl font-bold text-orange-600" th:text="${pendingCount}"></p>
     </div>
-    <div class="bg-white p-6 rounded-2xl shadow">
-      <p class="text-gray-500">New Inquiries</p>
-      <p id="newInquiries" class="text-4xl font-bold text-red-600">0</p>
+    <div class="bg-white p-8 rounded-3xl shadow">
+      <p class="text-gray-500">In Preparation</p>
+      <p class="text-5xl font-bold text-amber-600" th:text="${bakingCount}"></p>
     </div>
-    <div class="bg-white p-6 rounded-2xl shadow">
-      <p class="text-gray-500">Pending Feedback</p>
-      <p id="pendingFeedback" class="text-4xl font-bold text-orange-600">0</p>
+    <div class="bg-white p-8 rounded-3xl shadow">
+      <p class="text-gray-500">Delivered</p>
+      <p class="text-5xl font-bold text-green-600" th:text="${deliveredCount}"></p>
     </div>
-    <div class="bg-white p-6 rounded-2xl shadow">
-      <p class="text-gray-500">Featured Products</p>
-      <p id="featuredCount" class="text-4xl font-bold text-green-600">0</p>
+    <div class="bg-white p-8 rounded-3xl shadow">
+      <p class="text-gray-500">New Orders</p>
+      <p class="text-5xl font-bold text-red-600" th:text="${newOrderCount}"></p>
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="flex border-b mb-6">
-    <button onclick="showTab(0)" class="tab-button active px-8 py-3 font-medium" id="tab0">Products Management</button>
-    <button onclick="showTab(1)" class="tab-button px-8 py-3 font-medium" id="tab1">Support Center</button>
-  </div>
-
-  <!-- Tab 1: Products -->
-  <div id="tabContent0" class="tab-content">
-    <div th:replace="~{admin/products :: productsContent}"></div>
-  </div>
-
-  <!-- Tab 2: Support -->
-  <div id="tabContent1" class="tab-content hidden">
-    <div th:replace="~{admin/support :: supportContent}"></div>
+  <div class="bg-white rounded-3xl shadow p-8">
+    <h2 class="text-2xl font-semibold mb-6">Recent Orders</h2>
+    <table class="w-full">
+      <thead class="border-b">
+      <tr>
+        <th class="text-left py-4">Order ID</th>
+        <th class="text-left py-4">Customer</th>
+        <th class="text-left py-4">Status</th>
+        <th class="text-right py-4">Total (LKR)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${allOrders}" class="border-b hover:bg-gray-50">
+        <td class="py-4">#<span th:text="${order.id}"></span></td>
+        <td class="py-4" th:text="${order.customerName}"></td>
+        <td class="py-4">
+                            <span th:text="${order.status}"
+                                  class="px-4 py-1 rounded-full text-xs"
+                                  th:classappend="${order.status == 'PENDING'} ? 'bg-orange-100 text-orange-700' :
+                                                  ${order.status == 'DELIVERED'} ? 'bg-green-100 text-green-700' : 'bg-gray-100'">
+                            </span>
+        </td>
+        <td class="py-4 text-right font-medium" th:text="${order.totalAmount}"></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-
-<script th:src="@{/js/admin.js}"></script>
-<script>
-  function showTab(n) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    document.getElementById('tabContent'+n).classList.remove('hidden');
-
-    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active', 'border-b-4', 'border-amber-600'));
-    document.getElementById('tab'+n).classList.add('active', 'border-b-4', 'border-amber-600');
-  }
-</script>
 </body>
 </html>

@@ -28,16 +28,20 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        String roleWithPrefix = user.getRole().startsWith("ROLE_")
-                ? user.getRole()
-                : "ROLE_" + user.getRole();
+        // Role prefix හරි කරන්න
+        String role = user.getRole();
+        if (!role.startsWith("ROLE_")) {
+            role = "ROLE_" + role;
+        }
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(roleWithPrefix))
+                user.isActive(),           // enabled
+                true, true, true,          // account non expired, non locked, credentials non expired
+                Collections.singletonList(new SimpleGrantedAuthority(role))
         );
     }
 

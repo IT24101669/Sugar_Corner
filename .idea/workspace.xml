@@ -4,47 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="dn hari wage">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/main.html" afterDir="false" />
+    <list default="true" id="de9e6816-c279-4cd1-b327-e7c759b23c37" name="Changes" comment="dn balamu">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/JS/cart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/admin-layout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/controller/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/service/PaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/brownies/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/brownies/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/customers.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/customers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/feedback-inquiries.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/feedback-inquiries.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/JS/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/JS/common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/JS/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/JS/products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/orders.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/payments.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/payments.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/products.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/feedback.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/feedback.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/order-history.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/order-history.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/place-order.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/place-order.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/product-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/product-details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/products.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/customer/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/customer/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragments/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/main.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragments/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/navbar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragments/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/layout/main.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/brownies/controller/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/brownies/controller/AdminController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/brownies/controller/CustomerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/brownies/controller/CustomerController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/brownies/service/PaymentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/brownies/service/PaymentService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/brownies/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/brownies/config/SecurityConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/brownies/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/brownies/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/customers.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/customers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/feedback-inquiries.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/feedback-inquiries.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/JS/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/JS/common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/JS/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/JS/products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/orders.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/payments.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/payments.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/products.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/feedback.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/feedback.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/order-history.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/order-history.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/place-order.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/place-order.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/product-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/product-details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/products.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/customer/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/customer/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragments/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragments/main.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/fragments/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragments/navbar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/fragments/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragments/sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/layout/main.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -232,7 +221,7 @@
       <workItem from="1774520610323" duration="2257000" />
       <workItem from="1774599675877" duration="5086000" />
       <workItem from="1774605739254" duration="14482000" />
-      <workItem from="1774634795906" duration="18719000" />
+      <workItem from="1774634795906" duration="27104000" />
     </task>
     <task id="LOCAL-00001" summary="project folder structure">
       <option name="closed" value="true" />
@@ -402,7 +391,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774690884235</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="dn balamu">
+      <option name="closed" value="true" />
+      <created>1774716823372</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1774716823372</updated>
+    </task>
+    <task id="LOCAL-00023" summary="dn balamu">
+      <option name="closed" value="true" />
+      <created>1774716841628</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1774716841628</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -448,7 +453,8 @@
     <MESSAGE value="hede hari hutto" />
     <MESSAGE value="balapan http dn mokada kiyala" />
     <MESSAGE value="dn hari wage" />
-    <option name="LAST_COMMIT_MESSAGE" value="dn hari wage" />
+    <MESSAGE value="dn balamu" />
+    <option name="LAST_COMMIT_MESSAGE" value="dn balamu" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

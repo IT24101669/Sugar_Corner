@@ -1,30 +1,166 @@
-<div th:replace="~{fragments/main :: main(content='customer/place-order')}">
-  <h1 class="text-4xl font-bold text-center mb-10">Place Your Order</h1>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Sugar Corner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
 
-  <div class="grid lg:grid-cols-12 gap-10 max-w-6xl mx-auto">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-4xl font-bold text-center mb-10">🛒 Your Cart</h1>
+
+  <div class="grid lg:grid-cols-12 gap-10">
+
     <!-- Cart Items -->
     <div class="lg:col-span-7 bg-white rounded-3xl shadow-xl p-8">
-      <h2 class="text-2xl font-semibold mb-6">🛒 Your Cart (<span id="cartCount">0</span>)</h2>
-      <div id="cartContainer" class="space-y-6 min-h-[400px]">
-        <!-- JS will load -->
+      <h2 class="text-2xl font-semibold mb-6">Items (<span id="cartCountTop">0</span>)</h2>
+      <div id="cartContainer" class="space-y-6 min-h-[300px]">
+        <!-- JS renders here -->
       </div>
       <div class="text-center mt-8">
-        <a th:href="@{/customer/products}" class="text-orange-600 hover:underline">+ Add More Brownies</a>
+        <a th:href="@{/customer/products}" class="text-orange-600 hover:underline text-lg">+ Add More Brownies</a>
       </div>
     </div>
 
     <!-- Summary -->
     <div class="lg:col-span-5">
-      <div class="bg-white rounded-3xl shadow-xl p-8 sticky top-6">
+      <div class="bg-white rounded-3xl shadow-xl p-8 sticky top-8">
         <h2 class="text-2xl font-semibold mb-6">Order Summary</h2>
-        <!-- Your existing summary, address, payment section -->
-        <button onclick="submitOrder()"
-                class="w-full py-6 bg-green-600 hover:bg-green-700 text-white text-xl font-bold rounded-3xl">
-          Confirm Order & Place
+
+        <div class="space-y-4 mb-8 text-lg">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span id="subtotal">LKR 0</span>
+          </div>
+          <div class="flex justify-between border-t pt-4 font-bold text-xl">
+            <span>Total</span>
+            <span id="cartTotal" class="text-orange-600">LKR 0</span>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-medium mb-2">Delivery Address</label>
+          <textarea id="deliveryAddress" rows="3"
+                    class="w-full p-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-orange-500"
+                    placeholder="Your full address...">Negombo, Western Province, Sri Lanka</textarea>
+        </div>
+
+        <div class="mb-8">
+          <label class="block text-sm font-medium mb-2">Note (Optional)</label>
+          <input id="customerNote" type="text"
+                 class="w-full p-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-orange-500"
+                 placeholder="Any special requests?">
+        </div>
+
+        <button onclick="placeOrder()"
+                class="w-full bg-green-600 hover:bg-green-700 text-white py-6 rounded-3xl text-xl font-bold">
+          Confirm Order (Cash on Delivery)
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<script th:src="@{/js/customer.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script>
+  let cart = [];
+
+  function loadCart() {
+    cart = JSON.parse(localStorage.getItem('sugarCart') || '[]');
+    renderCart();
+  }
+
+  function renderCart() {
+    const container = document.getElementById('cartContainer');
+    let total = 0;
+    let html = '';
+
+    if (cart.length === 0) {
+      container.innerHTML = `<p class="text-center py-12 text-gray-400 text-xl">Your cart is empty</p>`;
+      document.getElementById('cartTotal').textContent = 'LKR 0';
+      return;
+    }
+
+    cart.forEach((item, i) => {
+      const itemTotal = item.price * item.quantity;
+      total += itemTotal;
+      html += `
+                    <div class="flex justify-between items-center border-b pb-6">
+                        <div>
+                            <p class="font-medium">${item.name}</p>
+                            <p class="text-sm text-gray-500">LKR ${item.price} × ${item.quantity}</p>
+                            ${item.customization ? `<p class="text-xs text-orange-600">Note: ${item.customization}</p>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold">LKR ${itemTotal}</p>
+                            <button onclick="removeItem(${i})" class="text-red-500 text-sm mt-1">Remove</button>
+                        </div>
+                    </div>`;
+    });
+
+    container.innerHTML = html;
+    document.getElementById('cartTotal').textContent = `LKR ${total}`;
+    document.getElementById('cartCountTop').textContent = cart.length;
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    localStorage.setItem('sugarCart', JSON.stringify(cart));
+    renderCart();
+    updateCartCount();
+  }
+
+  async function placeOrder() {
+    if (cart.length === 0) {
+      showToast("Cart is empty!", "error");
+      return;
+    }
+
+    const orderRequest = {
+      orderType: "DELIVERY",
+      deliveryAddress: document.getElementById("deliveryAddress").value.trim() || "Negombo",
+      customerNote: document.getElementById("customerNote").value.trim(),
+      items: cart.map(item => ({
+        productName: item.name,
+        quantity: item.quantity,
+        unitPrice: item.price,
+        customization: item.customization || ""
+      }))
+    };
+
+    try {
+      const res = await fetch('/customer/orders/place', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderRequest)
+      });
+
+      if (res.ok) {
+        const order = await res.json();
+        localStorage.removeItem('sugarCart');
+        showToast(`Order #${order.id} placed successfully!`, 'success');
+        setTimeout(() => window.location.href = '/customer/orders/history', 1500);
+      } else {
+        showToast("Failed to place order", "error");
+      }
+    } catch (e) {
+      showToast("Network error. Please try again.", "error");
+    }
+  }
+
+  function showToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = `fixed bottom-6 right-6 px-6 py-3 rounded-2xl text-white shadow-2xl z-50 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  window.onload = loadCart;
+</script>
+</body>
+</html>

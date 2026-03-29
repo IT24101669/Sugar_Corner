@@ -1,20 +1,34 @@
-<div th:replace="~{fragments/main :: main(content='customer/products')}">
-  <h1 class="text-4xl font-bold mb-8 text-gray-800">Our Delicious Brownies</h1>
+<!-- templates/customer/products.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Sugar Corner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
 
-  <div class="mb-8 flex flex-wrap gap-4">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-5xl font-bold mb-2 text-gray-800">Our Delicious Brownies</h1>
+  <p class="text-xl text-gray-600 mb-10">Freshly baked daily • Negombo</p>
+
+  <div class="flex flex-wrap gap-4 mb-10">
     <input type="text" id="searchInput" placeholder="Search brownies..."
-           class="flex-1 px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-orange-500">
-    <button onclick="searchProducts()" class="bg-orange-600 text-white px-8 py-3 rounded-2xl font-medium">Search</button>
+           class="flex-1 px-6 py-4 border border-gray-300 rounded-3xl focus:outline-none focus:border-orange-500"
+           onkeyup="if(event.key === 'Enter') searchProducts()">
+    <button onclick="searchProducts()"
+            class="bg-orange-600 text-white px-10 py-4 rounded-3xl font-medium">Search</button>
   </div>
 
-  <div id="productContainer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- JS loads products -->
-  </div>
-
-  <h2 class="text-3xl font-bold mt-16 mb-8">Featured Treats</h2>
-  <div id="featuredContainer" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <!-- JS loads featured -->
+  <div id="productContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <!-- Products loaded by JS -->
   </div>
 </div>
 
+<script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/products.js}"></script>
+</body>
+</html>

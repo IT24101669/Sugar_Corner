@@ -1,23 +1,26 @@
-<div th:replace="~{fragments/main :: main(content='admin/products')}">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-4xl font-bold text-gray-800">Products Management</h1>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div th:replace="~{fragments/admin-layout :: admin-layout(content='admin/products-content')}">
+  <div class="flex justify-between mb-8">
+    <h1 class="text-4xl font-bold">Products Management</h1>
     <button onclick="showAddProductModal()"
-            class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-2xl font-medium flex items-center gap-2">
-      <span class="text-xl">+</span> Add New Product
+            class="bg-orange-600 text-white px-6 py-3 rounded-2xl font-medium">
+      + Add New Product
     </button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="productGrid">
-    <!-- JavaScript මගින් load වෙනවා -->
+  <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- JS මගින් load වෙනවා -->
   </div>
 </div>
 
-<!-- Modal (ඔයාගේ පැරණි modal එකම තියාගන්න) -->
-<div id="productModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-  <!-- ... ඔයාගේ පැරණි modal content එකම තියාගන්න ... -->
-</div>
-
-<script>
-  // ඔයාගේ පැරණි product management script එකම තියාගන්න (loadProducts, saveProduct, etc.)
-  window.onload = loadProducts;
-</script>
+<script th:src="@{/js/products.js}"></script>
+</body>
+</html>
